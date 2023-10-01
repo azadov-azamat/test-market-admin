@@ -1,0 +1,15 @@
+.react-dataTable {
+  .pagination-my {
+    p {
+
+    }
+  }
+
+  @media screen and (max-width: 641px) {
+    .pagination-my {
+      p {
+        font-size: 13px!important;
+      }
+    }
+  }
+}
