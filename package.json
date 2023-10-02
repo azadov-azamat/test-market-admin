@@ -115,7 +115,7 @@
     "sass-loader": "8.0.2"
   },
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   },
   "browserslist": {
     "production": [
