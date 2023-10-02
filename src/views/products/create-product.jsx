@@ -6,16 +6,17 @@ import {INPUT_MSG} from "../../utility/Utils"
 import {unwrapResult} from "@reduxjs/toolkit"
 import {createProduct, patchProduct, setProduct} from "../../redux/reducers/product"
 import FileUploaderSingle from "../../components/FileUploaderSingle"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import Button from '../../components/Btn'
 import {uploadFile} from "../../redux/reducers/file"
-import {getStores, setStore} from "../../redux/reducers/store"
+import {setStore} from "../../redux/reducers/store"
 import Select from "react-select"
 import {getAddresses} from "../../redux/reducers/address"
 
 export default function CreateProduct({
                                           toggleModal,
-                                          modal
+                                          modal,
+                                          storeId
                                       }) {
 
     const dispatch = useDispatch()
@@ -23,16 +24,20 @@ export default function CreateProduct({
         product,
         isLoading
     } = useSelector(state => state.products)
-    const {stores} = useSelector(state => state.stores)
     const {addresses} = useSelector(state => state.addresses)
 
     const [file, setFile] = useState(null)
+
+    useEffect(() => {
+        if (product) {
+            dispatch(getAddresses())
+        }
+    }, [product])
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
         productPrice: Yup.string().required(INPUT_MSG),
         productQuantity: Yup.string().required(INPUT_MSG),
-        storeId: Yup.string().required(INPUT_MSG),
         adressId: Yup.string().required(INPUT_MSG),
         productMeasure: Yup.string().required(INPUT_MSG)
     })
@@ -42,7 +47,7 @@ export default function CreateProduct({
             productName: product?.productName || '',
             productPrice: product?.productPrice || '',
             productQuantity: product?.productQuantity || '',
-            storeId: product?.storeId || '',
+            storeId,
             adressId: product?.adressId || '',
             productMeasure: product?.productMeasure || ''
         },
@@ -136,7 +141,7 @@ export default function CreateProduct({
                                     id={'productModel'}
                                     name={"productModel"}
                                     defaultValue={product?.productModel}
-                                    type={"text"}
+                                    type={"textarea"}
                                     onChange={formik.handleChange}
                                 />
                             </div>
@@ -165,35 +170,35 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
-                        <Col>
-                            <div className="mb-1">
-                                <Label className="form-label" for="storeId">
-                                    Do'kon tanlang
-                                </Label>
-                                <Select
-                                    id="storeId"
-                                    name="storeId"
-                                    placeholder="Tanlang..."
-                                    onFocus={() => {
-                                        dispatch(getStores())
-                                    }}
-                                    options={stores}
-                                    // defaultValue={{
-                                    //     label: currentItem?.active ? "active" : "inactive",
-                                    //     value: currentItem?.active
-                                    // }}
-                                    getOptionLabel={option => option.storeName}
-                                    getOptionValue={option => option.id}
-                                    onChange={(val) => {
-                                        formik.setFieldValue("storeId", val.id)
-                                    }}
-                                />
-                            </div>
-                        </Col>
+                        {/*<Col>*/}
+                        {/*    <div className="mb-1">*/}
+                        {/*        <Label className="form-label" for="storeId">*/}
+                        {/*            Do'kon tanlang*/}
+                        {/*        </Label>*/}
+                        {/*        <Select*/}
+                        {/*            id="storeId"*/}
+                        {/*            name="storeId"*/}
+                        {/*            placeholder="Tanlang..."*/}
+                        {/*            onFocus={() => {*/}
+                        {/*                dispatch(getStores())*/}
+                        {/*            }}*/}
+                        {/*            options={stores}*/}
+                        {/*            // defaultValue={{*/}
+                        {/*            //     label: currentItem?.active ? "active" : "inactive",*/}
+                        {/*            //     value: currentItem?.active*/}
+                        {/*            // }}*/}
+                        {/*            getOptionLabel={option => option.storeName}*/}
+                        {/*            getOptionValue={option => option.id}*/}
+                        {/*            onChange={(val) => {*/}
+                        {/*                formik.setFieldValue("storeId", val.id)*/}
+                        {/*            }}*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</Col>*/}
                         <Col>
                             <div className="mb-1">
                                 <Label className="form-label" for="adressId">
-                                    Mahsulot manzilini tanlang
+                                    Mahsulot manzilini tanlang *
                                 </Label>
                                 <Select
                                     id="adressId"
@@ -203,10 +208,10 @@ export default function CreateProduct({
                                     }}
                                     placeholder="Tanlang..."
                                     options={addresses}
-                                    // defaultValue={{
-                                    //     label: currentItem?.active ? "active" : "inactive",
-                                    //     value: currentItem?.active
-                                    // }}
+                                    defaultValue={{
+                                        label: addresses.find(item => item.id === product?.adressId)?.adressName,
+                                        value: product?.adressId
+                                    }}
                                     getOptionLabel={option => option.adressName}
                                     getOptionValue={option => option.id}
                                     onChange={(val) => {
@@ -218,7 +223,7 @@ export default function CreateProduct({
                         <Col>
                             <div className="mb-1">
                                 <Label className="form-label" for="productMeasure">
-                                    Mahsulot birligini kiriting
+                                    Mahsulot birligini kiriting *
                                 </Label>
                                 <Select
                                     id="productMeasure"
@@ -229,10 +234,10 @@ export default function CreateProduct({
                                         {value: "dona"},
                                         {value: "litr"}
                                     ]}
-                                    // defaultValue={{
-                                    //     label: currentItem?.active ? "active" : "inactive",
-                                    //     value: currentItem?.active
-                                    // }}
+                                    defaultValue={{
+                                        label: product?.productMeasure,
+                                        value: product?.productMeasure
+                                    }}
                                     getOptionLabel={option => option.value}
                                     getOptionValue={option => option.value}
                                     onChange={(val) => {
