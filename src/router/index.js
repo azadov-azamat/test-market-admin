@@ -140,7 +140,7 @@ const Router = () => {
                 {/* If user is logged in Redirect user to DefaultRoute else to login */}
                 <Route
                     exact
-                    path='/login'
+                    path='/'
                     render={() => {
                         return <Redirect to={DefaultRoute}/>
                     }}
@@ -150,7 +150,7 @@ const Router = () => {
                     exact
                     path='/misc/not-authorized'
                     render={() => {
-                        return <Redirect to={'/'}/>
+                        return <Redirect to={'/login'}/>
                     }}
                 />
                 {ResolveRoutes()}
