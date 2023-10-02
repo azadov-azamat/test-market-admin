@@ -5,14 +5,14 @@ import {TOKEN} from "../../utility/Utils"
 const TemplateTitle = 'magazine-admin'
 
 // ** Default Route
-const DefaultRoute = '/login'
+const DefaultRoute = '/'
 
 // const token = localStorage.getItem(TOKEN) || ""
 
 // ** Merge Routes
 const Routes = [
     {
-        path: '/login',
+        path: '/',
         component: lazy(() => import('../../views/authentication/LoginBasic')),
         layout: 'BlankLayout',
         meta: {
