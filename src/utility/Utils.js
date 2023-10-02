@@ -2,7 +2,8 @@ import currency from 'currency.js'
 import axios from 'axios'
 import moment from 'moment'
 
-export const BASE_URL = "http://176.96.241.182:5000/api/v1"
+// export const BASE_URL = "http://176.96.241.182:5000/api/v1"
+export const BASE_URL = "https://guzarpost.uz/api/v1"
 
 // LOCAL STORAGE
 export const TOKEN = "magazine-admin"
