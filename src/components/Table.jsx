@@ -15,22 +15,22 @@ const TableComponent = ({ref, data, total_count, columns, currentPage, totalPage
     const startIndex = currentPage === 1 ? currentPage : (currentPage * 10)
     const lastIndex = startIndex + (size - 1)
 
-    const handleSort = (column, sortDirection) => {
-        const dataSort = [
-            {
-                field: column?.sortField,
-                direction: sortDirection.toUpperCase()
-            }
-        ]
-        if (query?.sorts) {
-            dataSort.push(...query?.sorts)
-            delete query.sorts
-        }
+    const handleSort = (column) => {
+        // const dataSort = [
+        //     {
+        //         field: column?.sortField,
+        //         direction: sortDirection.toUpperCase()
+        //     }
+        // ]
+        // if (query?.sorts) {
+        //     dataSort.push(...query?.sorts)
+        //     delete query.sorts
+        // }
 
         history.push({
             search: qs.stringify({
                 ...query,
-                sorts: dataSort
+                sort: column?.sortField
             })
         })
     }

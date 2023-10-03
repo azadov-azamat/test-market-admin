@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react'
-// import NameFormat from "../../components/name-format"
 import TableComponent from "../../components/Table"
-// import {getUserById, getUsersList, removeUser, removeUserById} from "../../redux/reducers/users"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Plus} from "react-feather"
+import {Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {BsEye} from "react-icons/bs"
-import {useLocation} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import {deleteUser, getUsers, setUser} from "../../redux/reducers/user"
 import qs from "qs"
 import CreateUser from "./create-user"
-// import Roles from "../../components/Roles"
+import Select from "react-select"
+import FilterUser from "./Filter"
 
 export default function Users() {
 
     const dispatch = useDispatch()
-    // const history = useHistory()
+    const history = useHistory()
     const location = useLocation()
     const {
         users,
@@ -30,6 +29,8 @@ export default function Users() {
     const {userData} = useSelector(state => state.auth)
 
     const [createModal, setCreateModal] = useState(false)
+    const [filter, setFilter] = useState(false)
+    const handleFilter = () => setFilter(!filter)
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
@@ -58,6 +59,8 @@ export default function Users() {
         {
             name: "F.I.O",
             width: '200px',
+            sortable: true,
+            sortField: "sellerName",
             wrap: true,
             selector: (row) => row.sellerName
         },
@@ -65,17 +68,23 @@ export default function Users() {
             name: 'Telefon raqam',
             width: '200px',
             wrap: true,
+            sortable: true,
+            sortField: "sellerPhone",
             selector: (row) => row.sellerPhone
         },
         {
             name: "Ro'yxatdan o'tgan vaqt",
             width: '200px',
+            sortable: true,
+            sortField: "createdAt",
             wrap: true,
             selector: (row) => <DateFormatClock current_date={row.createdAt}/>
         },
         {
             name: "O'zgartirish kiritilgan vaqt",
             width: '200px',
+            sortable: true,
+            sortField: "updatedAt",
             wrap: true,
             selector: (row) => <DateFormatClock current_date={row.updatedAt}/>
         },
@@ -93,9 +102,38 @@ export default function Users() {
 
     return (
         <div>
-            <div className="d-flex items-center justify-content-between">
+            <div className="d-flex align-items-center justify-content-between">
                 <h4>Ma'lumotlar</h4>
                 <div className="d-flex gap-1">
+                    <div className="">
+                        <Select
+                            id="limit"
+                            name="limit"
+                            options={[
+                                {value: 10},
+                                {value: 15},
+                                {value: 20},
+                                {value: 25}
+                            ]}
+                            defaultValue={{
+                                label: limit,
+                                value: limit
+                            }}
+                            getOptionLabel={option => option.value}
+                            getOptionValue={option => option.value}
+                            onChange={(val) => {
+                                history.push({
+                                    search: qs.stringify({
+                                        limit: val?.value,
+                                        ...query
+                                    })
+                                })
+                            }}
+                        />
+                    </div>
+                    <Button onClick={handleFilter} className="btn-icon" outline color="primary">
+                        <Filter size={16}/>
+                    </Button>
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
@@ -108,12 +146,14 @@ export default function Users() {
                     columns={basicColumns}
                     size={users.length}
                     limit={limit}
+                    sortServer
                     totalPages={pageCount}
                     currentPage={currentPage}
                     total_count={totalCount}
                 />
             </div>
             <CreateUser toggleModal={toggleCreate} modal={createModal}/>
+            <FilterUser handleFilter={handleFilter} open={filter}/>
         </div>
     )
 }

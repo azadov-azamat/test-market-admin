@@ -1,20 +1,23 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Plus} from "react-feather"
+import {Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {BsEye} from "react-icons/bs"
-import {useLocation} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
 import CreateProduct from "./create-product"
 import {deleteProduct, getProducts, setProduct} from "../../redux/reducers/product"
+import {getAddresses} from "../../redux/reducers/address"
+import Select from "react-select"
+import FilterProduct from "./Filter"
 
 export default function Product({storeId}) {
 
     const dispatch = useDispatch()
-    // const history = useHistory()
+    const history = useHistory()
     const location = useLocation()
     const {
         products,
@@ -24,80 +27,99 @@ export default function Product({storeId}) {
         totalCount,
         isLoading
     } = useSelector(state => state.products)
+    const {addresses} = useSelector(state => state.addresses)
 
     const [createModal, setCreateModal] = useState(false)
+    const [filter, setFilter] = useState(false)
+    const handleFilter = () => setFilter(!filter)
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
     useEffect(() => {
-        if (location.search) {
-            dispatch(getProducts({...query}))
-        } else {
-            dispatch(getProducts())
+        if (storeId) {
+            history.push({
+                search: qs.stringify({
+                    filter: {storeId}
+                })
+            })
         }
+    }, [storeId])
+
+    useEffect(() => {
+        dispatch(getProducts({...query}))
     }, [location])
+
+    useEffect(() => {
+        dispatch(getAddresses())
+    }, [])
 
     function editProduct(currentProduct) {
         dispatch(setProduct(currentProduct))
         toggleCreate()
     }
 
-    console.log(storeId)
-
     const basicColumns = [
-        {
-            width: '50px',
-            wrap: true,
-            cell: () => <>
-                <BsEye className={'text-success cursor-pointer'} size={20}/>
-            </>
-        },
+        // {
+        //     width: '50px',
+        //     wrap: true,
+        //     cell: () => <>
+        //         <BsEye className={'text-success cursor-pointer'} size={20}/>
+        //     </>
+        // },
         {
             name: "Nomi",
-            width: '100px',
-            wrap: true,
+            width: '250px',
+            sortable: true,
+            sortField: "productName",
+            // wrap: true,
             selector: (row) => row.productName
         },
         {
             name: "Narxi",
             width: '100px',
+            sortable: true,
+            sortField: "productPrice",
             wrap: true,
             selector: (row) => `${row.productPrice} sum`
         },
         {
             name: "Miqdori",
             width: '100px',
+            sortable: true,
+            sortField: "productQuantity",
             wrap: true,
             selector: (row) => `${row.productQuantity} ${row.productMeasure}`
         },
-        // {
-        //     name: "Do'koni",
-        //     width: '100px',
-        //     wrap: true,
-        //     selector: (row) => `${row?.storeId}`
-        // },
         {
             name: "Manzili",
-            width: '100px',
+            sortable: true,
+            sortField: "adressId",
+            width: '150px',
             wrap: true,
-            selector: (row) => `${row?.adressId}`
+            selector: (row) => addresses.find(item => item.id === row.adressId)?.adressName
         },
         {
             name: "Modeli",
-            width: '100px',
+            width: '150px',
+            sortable: true,
+            sortField: "productModel",
             wrap: true,
             selector: (row) => row.productModel
         },
         {
             name: "Ro'yxatga olingan vaqt",
             width: '200px',
+            sortable: true,
+            sortField: "createdAt",
             wrap: true,
             selector: (row) => <DateFormatClock current_date={row.createdAt}/>
         },
         {
             name: "O'zgartirish kiritilgan vaqt",
             width: '200px',
+            sortable: true,
+            sortField: "updatedAt",
             wrap: true,
             selector: (row) => <DateFormatClock current_date={row.updatedAt}/>
         },
@@ -115,9 +137,38 @@ export default function Product({storeId}) {
 
     return (
         <div>
-            <div className="d-flex items-center justify-content-between">
+            <div className="d-flex align-items-center justify-content-between">
                 <h4>Ma'lumotlar</h4>
                 <div className="d-flex gap-1">
+                    <div class="">
+                        <Select
+                            id="limit"
+                            name="limit"
+                            options={[
+                                {value: 10},
+                                {value: 15},
+                                {value: 20},
+                                {value: 25}
+                            ]}
+                            defaultValue={{
+                                label: limit,
+                                value: limit
+                            }}
+                            getOptionLabel={option => option.value}
+                            getOptionValue={option => option.value}
+                            onChange={(val) => {
+                                history.push({
+                                    search: qs.stringify({
+                                        limit: val?.value,
+                                        ...query
+                                    })
+                                })
+                            }}
+                        />
+                    </div>
+                    <Button onClick={handleFilter} className="btn-icon" outline color="primary">
+                        <Filter size={16}/>
+                    </Button>
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
@@ -126,16 +177,18 @@ export default function Product({storeId}) {
             <div>
                 <TableComponent
                     progressPending={isLoading}
-                    data={products.filter(item => item.storeId === storeId)}
+                    data={products}
+                    sortServer
                     columns={basicColumns}
                     size={products.length}
                     limit={limit}
-                    totalPage s={pageCount}
+                    totalPages={pageCount}
                     currentPage={currentPage}
                     total_count={totalCount}
                 />
             </div>
             <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
+            <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
         </div>
     )
 }

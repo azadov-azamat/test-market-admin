@@ -6,7 +6,7 @@ import {INPUT_MSG} from "../../utility/Utils"
 import {unwrapResult} from "@reduxjs/toolkit"
 import {createProduct, patchProduct, setProduct} from "../../redux/reducers/product"
 import FileUploaderSingle from "../../components/FileUploaderSingle"
-import {useEffect, useState} from "react"
+import {useState} from "react"
 import Button from '../../components/Btn'
 import {uploadFile} from "../../redux/reducers/file"
 import {setStore} from "../../redux/reducers/store"
@@ -27,12 +27,6 @@ export default function CreateProduct({
     const {addresses} = useSelector(state => state.addresses)
 
     const [file, setFile] = useState(null)
-
-    useEffect(() => {
-        if (product) {
-            dispatch(getAddresses())
-        }
-    }, [product])
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),

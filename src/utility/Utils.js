@@ -2,19 +2,22 @@ import currency from 'currency.js'
 import axios from 'axios'
 import moment from 'moment'
 
-// export const BASE_URL = "http://176.96.241.182:5000/api/v1"
-export const BASE_URL = "https://guzarpost.uz/api/v1"
+export const BASE_URL = "http://176.96.241.182:5000/api/v1"
+// export const BASE_URL = "https://guzarpost.uz/api/v1"
 
 // LOCAL STORAGE
 export const TOKEN = "magazine-admin"
 export const INPUT_MSG = "Iltimos, to`liq kiriting"
 
+export const getToken = () => localStorage.getItem(TOKEN)
+
+export const getAuthorizationHeader = () => `Bearer ${getToken()}`
 
 export const http_auth = axios.create({
     baseURL: BASE_URL,
     headers: {
         Accept: "application/json",
-        Authorization: `bearer ${localStorage.getItem(TOKEN)}`
+        Authorization: getAuthorizationHeader()
     }
 })
 

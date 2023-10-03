@@ -6,15 +6,16 @@ import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {BsEye} from "react-icons/bs"
-import {useLocation} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
 import CreateAddress from "./create-address"
 import {deleteAddress, getAddresses, setAddress} from "../../redux/reducers/address"
+import Select from "react-select"
 
 export default function Stores() {
 
     const dispatch = useDispatch()
-    // const history = useHistory()
+    const history = useHistory()
     const location = useLocation()
     const {
         addresses,
@@ -53,7 +54,7 @@ export default function Stores() {
         },
         {
             name: "Nomi",
-            width: '200px',
+            width: '180px',
             wrap: true,
             selector: (row) => row.adressName
         },
@@ -83,9 +84,34 @@ export default function Stores() {
 
     return (
         <div>
-            <div className="d-flex items-center justify-content-between">
+            <div className="d-flex justify-content-between align-items-center">
                 <h4>Ma'lumotlar</h4>
                 <div className="d-flex gap-1">
+                    <Select
+                        id="adressId"
+                        name="adressId"
+                        placeholder="Tanlang..."
+                        options={[
+                            {value: 10},
+                            {value: 15},
+                            {value: 20},
+                            {value: 25}
+                        ]}
+                        // defaultValue={{
+                        //     label: addresses.find(item => item.id === product?.adressId)?.adressName,
+                        //     value: product?.adressId
+                        // }}
+                        getOptionLabel={option => option.value}
+                        getOptionValue={option => option.value}
+                        onChange={(val) => {
+                            history.push({
+                                search: qs.stringify({
+                                    limit: val?.value,
+                                    ...query
+                                })
+                            })
+                        }}
+                    />
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>

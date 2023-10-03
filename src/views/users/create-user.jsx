@@ -41,6 +41,7 @@ export default function CreateUser({
                 })
             } else {
                 dispatch(createUser(val)).then(unwrapResult).then(function () {
+                    dispatch(setUser(null))
                     toggleModal()
                 })
             }
@@ -57,7 +58,6 @@ export default function CreateUser({
             toggle={toggleModal}
             size={"lg"}
             className="modal-dialog-centered"
-            // onClose/d={toggleModal}
         >
             <ModalHeader toggle={toggleModal}>
                 {user ? "Sotuvchini o'zgartirish" : "Sotuvchi qo'shish"}
@@ -92,7 +92,7 @@ export default function CreateUser({
                                 />
                             </div>
                         </Col>
-                        {!user && <Col>
+                        <Col>
                             <div className="mb-1">
                                 <Label for={"sellerPassword"}>Parol *</Label>
                                 <Input
@@ -102,7 +102,7 @@ export default function CreateUser({
                                     onChange={formik.handleChange}
                                 />
                             </div>
-                        </Col>}
+                        </Col>
                     </Row>
                     <hr/>
                     <div className="w-100 d-flex justify-content-end">
