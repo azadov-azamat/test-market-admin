@@ -86,6 +86,18 @@ const FilterSales = ({
             <OffcanvasBody className="mx-0 flex-grow-0" style={{height: '100vh'}}>
                 <Form onSubmit={formik.handleSubmit}>
                     <div className="mb-1">
+                        <Label className="form-label" for="id">
+                           ID
+                        </Label>
+                        <Input
+                            type={"text"}
+                            id={"id"}
+                            name={"id"}
+                            placeholder={"Savdo ID sini kiriting..."}
+                            onChange={formik.handleChange}
+                        />
+                    </div>
+                    <div className="mb-1">
                         <Label className="form-label" for="saleMainPrice">
                             Savdo summasi
                         </Label>

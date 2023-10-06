@@ -147,7 +147,10 @@ export default function SaleComponent({clientId}) {
                                 <CardBody className={"d-flex flex-column gap-1 cursor-pointer p-0 m-2"}
                                           onClick={() => history.push(`/administrator/sale/${item?.id}`)}>
                                     <div className="">
-                                        <span><b>Do'kon: </b> {stores?.find(val => val.id === item?.storeId)?.storeName}</span>
+                                        <span><b>ID </b>#{item?.id}</span>
+                                    </div>
+                                    <div className="">
+                                        <span><b> Do'kon: </b> {stores?.find(val => val.id === item?.storeId)?.storeName}</span>
                                     </div>
                                     <div className="">
                                         <span><b>Savdo sanasi: </b> <DateFormatClock
