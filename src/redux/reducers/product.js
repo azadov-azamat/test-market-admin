@@ -49,7 +49,7 @@ export const productSlice = createSlice({
         product: null,
         currentPage: 0,
         pageCount: 0,
-        limit: 0,
+       limit: 10,
         totalCount: 0
     },
     reducers: {

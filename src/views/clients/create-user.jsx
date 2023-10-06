@@ -5,7 +5,7 @@ import * as Yup from "yup"
 
 import ReactInputMask from "react-input-mask"
 import {INPUT_MSG} from "../../utility/Utils"
-import {createClient, patchClient, setUser} from "../../redux/reducers/user"
+import {createClient, patchClient, setClient} from "../../redux/reducers/user"
 import {unwrapResult} from "@reduxjs/toolkit"
 
 export default function CreateUser({
@@ -39,12 +39,12 @@ export default function CreateUser({
                     body: val
                 }
                 dispatch(patchClient(data)).then(unwrapResult).then(function () {
-                    dispatch(setUser(null))
+                    dispatch(setClient(null))
                     toggleModal()
                 })
             } else {
                 dispatch(createClient(val)).then(unwrapResult).then(function () {
-                    dispatch(setUser(null))
+                    dispatch(setClient(null))
                     toggleModal()
                 })
             }
@@ -59,14 +59,14 @@ export default function CreateUser({
         <Modal
             isOpen={modal}
             toggle={() => {
-                dispatch(setUser(null))
+                dispatch(setClient(null))
                 toggleModal()
             }}
             size={"lg"}
             className="modal-dialog-centered"
         >
             <ModalHeader toggle={() => {
-                dispatch(setUser(null))
+                dispatch(setClient(null))
                 toggleModal()
             }}>
                 {user ? "Sotuvchini o'zgartirish" : "Sotuvchi qo'shish"}

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {BsEye} from "react-icons/bs"
 import {useHistory, useLocation} from "react-router-dom"
-import {deleteClient, getClients, setUser} from "../../redux/reducers/user"
+import {deleteClient, getClients, setClient} from "../../redux/reducers/user"
 import qs from "qs"
 import CreateUser from "./create-user"
 import Select from "react-select"
@@ -20,14 +20,13 @@ export default function Clients() {
     const history = useHistory()
     const location = useLocation()
     const {
-        users,
+        clients,
         currentPage,
         pageCount,
         limit,
         totalCount,
         isLoading
     } = useSelector(state => state.users)
-    const {userData} = useSelector(state => state.auth)
 
     const [createModal, setCreateModal] = useState(false)
     const [filter, setFilter] = useState(false)
@@ -45,7 +44,7 @@ export default function Clients() {
     }, [location])
 
     function editUser(currentUser) {
-        dispatch(setUser(currentUser))
+        dispatch(setClient(currentUser))
         toggleCreate()
     }
 
@@ -110,7 +109,7 @@ export default function Clients() {
             name: 'Holat',
             wrap: true,
             width: '100px',
-            cell: (row) => <div className={`d-flex gap-1 ${row?.id === userData?.id && "hidden"}`}>
+            cell: (row) => <div className={`d-flex gap-1`}>
                 <BiEdit className={'text-warning cursor-pointer'} size={20} onClick={() => editUser(row)}/>
                 <BiTrash className={'text-danger cursor-pointer'} size={20}
                          onClick={() => dispatch(deleteClient(row?.id))}/>
@@ -160,9 +159,9 @@ export default function Clients() {
             <div>
                 <TableComponent
                     progressPending={isLoading}
-                    data={users}
+                    data={clients}
                     columns={basicColumns}
-                    size={users.length}
+                    size={clients.length}
                     limit={limit}
                     sortServer
                     totalPages={pageCount}

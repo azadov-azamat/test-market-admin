@@ -2,6 +2,7 @@ import React from 'react'
 import {Circle, Users} from 'react-feather'
 import {MdOutlineEditLocationAlt, MdProductionQuantityLimits} from "react-icons/md"
 import {BiStore} from "react-icons/bi"
+import {GiPayMoney} from "react-icons/gi"
 
 const adminNavigation = [
     {
@@ -10,18 +11,24 @@ const adminNavigation = [
         icon: <Users size={20}/>,
         children: [
             {
-                id: 'members',
+                id: 'employees',
                 title: 'Xodimlar',
                 icon: <Circle size={20}/>,
                 navLink: '/administrator/users'
             },
             {
-                id: 'members',
+                id: 'clients',
                 title: 'Mijozlar',
                 icon: <Circle size={20}/>,
                 navLink: '/administrator/clients'
             }
         ]
+    },
+    {
+        id: 'sales',
+        title: "Sotilgan mahsulotlar",
+        icon: <GiPayMoney size={20}/>,
+        navLink: '/administrator/sales'
     },
     {
         id: 'stores',

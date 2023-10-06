@@ -40,7 +40,7 @@ const TableComponent = ({ref, data, total_count, columns, currentPage, totalPage
             pathname: location.pathname,
             search: qs.stringify({
                 ...query,
-                page: page?.selected || undefined
+                page: (page?.selected + 1) || undefined
             })
         })
     }
@@ -53,7 +53,7 @@ const TableComponent = ({ref, data, total_count, columns, currentPage, totalPage
                 <ReactPaginate
                     previousLabel={''}
                     nextLabel={''}
-                    forcePage={currentPage}
+                    forcePage={currentPage - 1}
                     onPageChange={page => handlePaginate(page)}
                     pageCount={totalPages}
                     breakLabel={'...'}

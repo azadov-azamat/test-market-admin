@@ -15,6 +15,7 @@ import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from '
 import {handleLogout} from "../../../../redux/reducers/auth"
 import {useDispatch, useSelector} from "react-redux"
 import {TOKEN} from "../../../../utility/Utils"
+import {DefaultRoute} from "../../../../router/routes"
 
 const UserDropdown = () => {
     // ** State
@@ -58,7 +59,7 @@ const UserDropdown = () => {
                 {/*    <Settings size={14} className="me-75"/>*/}
                 {/*    <span className="align-middle">Sozlash</span>*/}
                 {/*</DropdownItem>*/}
-                <DropdownItem tag={Link} to={"/home"} onClick={() => dispatch(handleLogout())}>
+                <DropdownItem tag={Link} to={DefaultRoute} onClick={() => dispatch(handleLogout())}>
                     <Power size={14} className="me-75"/>
                     <span className="align-middle">Chiqish</span>
                 </DropdownItem>

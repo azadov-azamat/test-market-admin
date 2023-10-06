@@ -94,14 +94,19 @@ export const userSlice = createSlice({
     initialState: {
         users: [],
         user: null,
+        clients: [],
+        client: null,
         currentPage: 0,
         pageCount: 0,
-        limit: 0,
+        limit: 10,
         totalCount: 0
     },
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload
+        },
+        setClient: (state, action) => {
+            state.client = action.payload
         }
     },
     extraReducers: {
@@ -158,7 +163,7 @@ export const userSlice = createSlice({
         },
 
         [getClients.fulfilled]: (state, action) => {
-            state.users = action.payload?.data
+            state.clients = action.payload?.data
             state.currentPage = action.payload?.currentPage
             state.limit = action.payload?.limit
             state.pageCount = action.payload?.pageCount
@@ -174,7 +179,7 @@ export const userSlice = createSlice({
         },
 
         [getClientById.fulfilled]: (state, action) => {
-            state.user = action.payload?.data
+            state.client = action.payload?.data
             state.isLoading = false
         },
         [getClientById.pending]: (state) => {
@@ -186,7 +191,7 @@ export const userSlice = createSlice({
         },
 
         [createClient.fulfilled]: (state, action) => {
-            state.users = [...state.users, action.payload?.data]
+            state.clients = [...state.clients, action.payload?.data]
             state.isLoading = false
         },
         [createClient.pending]: (state) => {
@@ -198,7 +203,7 @@ export const userSlice = createSlice({
         },
 
         [deleteClient.fulfilled]: (state, action) => {
-            state.users = state.users.filter(item => item.id !== action?.meta?.arg)
+            state.clients = state.clients.filter(item => item.id !== action?.meta?.arg)
             state.isLoading = false
         },
         [deleteClient.pending]: (state) => {
@@ -210,7 +215,7 @@ export const userSlice = createSlice({
         },
 
         [patchClient.fulfilled]: (state, action) => {
-            state.users[state.users.findIndex(item => item.id === action.payload?.data?.id)] = action.payload?.data
+            state.clients[state.clients.findIndex(item => item.id === action.payload?.data?.id)] = action.payload?.data
             state.isLoading = false
         },
         [patchClient.pending]: (state) => {
@@ -224,6 +229,9 @@ export const userSlice = createSlice({
     }
 })
 
-export const {setUser} = userSlice.actions
+export const {
+    setUser,
+    setClient
+} = userSlice.actions
 
 export default userSlice.reducer

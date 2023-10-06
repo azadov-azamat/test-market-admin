@@ -207,7 +207,9 @@ export default function CreateProduct({
                                     options={[
                                         {value: "kg"},
                                         {value: "dona"},
-                                        {value: "litr"}
+                                        {value: "litr"},
+                                        {value: "metr"},
+                                        {value: "metrkv"}
                                     ]}
                                     defaultValue={{
                                         label: product?.productMeasure,

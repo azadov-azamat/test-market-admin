@@ -1,5 +1,4 @@
 import {lazy} from 'react'
-import {TOKEN} from "../../utility/Utils"
 
 // ** Document title
 const TemplateTitle = 'magazine-admin'
@@ -50,6 +49,19 @@ const Routes = [
         exact: true,
         meta: {
             navLink: '/administrator/clients'
+        }
+    },
+    {
+        path: '/administrator/sales',
+        component: lazy(() => import('../../views/sales')),
+        exact: true
+    },
+    {
+        path: '/administrator/sale/:id',
+        component: lazy(() => import('../../views/sales/view')),
+        exact: true,
+        meta: {
+            navLink: '/administrator/sales'
         }
     }
 ]

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Filter, Plus} from "react-feather"
+import {Download, Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
@@ -13,6 +13,8 @@ import {deleteProduct, getProducts, setProduct} from "../../redux/reducers/produ
 import {getAddresses} from "../../redux/reducers/address"
 import Select from "react-select"
 import FilterProduct from "./Filter"
+import {BASE_URL} from "../../utility/Utils"
+import DownloadProduct from "./download-product"
 
 export default function Product({storeId}) {
 
@@ -31,7 +33,9 @@ export default function Product({storeId}) {
 
     const [createModal, setCreateModal] = useState(false)
     const [filter, setFilter] = useState(false)
+    const [isDownload, setDownload] = useState(false)
     const handleFilter = () => setFilter(!filter)
+    const handleDownload = () => setDownload(!isDownload)
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
@@ -139,8 +143,8 @@ export default function Product({storeId}) {
         <div>
             <div className="d-flex align-items-center justify-content-between">
                 <h4>Ma'lumotlar</h4>
-                <div className="d-flex gap-1">
-                    <div class="">
+                <div className="d-flex gap-1 align-items-center">
+                    <div className="">
                         <Select
                             id="limit"
                             name="limit"
@@ -172,6 +176,9 @@ export default function Product({storeId}) {
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
+                    <Button className="btn-icon" onClick={handleDownload} outline color="primary">
+                        <Download size={16}/>
+                    </Button>
                 </div>
             </div>
             <div>
@@ -189,6 +196,7 @@ export default function Product({storeId}) {
             </div>
             <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
             <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
+            <DownloadProduct toggleModal={handleDownload} modal={isDownload}/>
         </div>
     )
 }

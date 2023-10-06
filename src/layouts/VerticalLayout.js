@@ -25,6 +25,9 @@ const VerticalLayout = props => {
                         history.push(DefaultRoute)
                     }
                 })
+        } else {
+            toast.error("Avtorizatsiyasiz ruhsat etilmaydi!")
+            history.push(DefaultRoute)
         }
     }, [pathname])
 
