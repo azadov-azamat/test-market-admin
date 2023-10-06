@@ -2,15 +2,19 @@ import {useDispatch, useSelector} from "react-redux"
 import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
 import React, {useEffect, useState} from "react"
-import {getSales} from "../../redux/reducers/sale"
+import {deleteSale, getSales} from "../../redux/reducers/sale"
 import {Button, Card, CardBody, Col, Row} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
 import {BASE_URL} from "../../utility/Utils"
 import {HiQrCode} from "react-icons/hi2"
 import Select from "react-select"
-import {Filter, Plus} from "react-feather"
+import {Edit, Filter, Plus, Trash} from "react-feather"
 import FilterSales from "./Filter"
 import CustomPagination from "../custom-pagination"
+import DeleteModal from "../delete-modal"
+import {toast} from "react-toastify"
+import {unwrapResult} from "@reduxjs/toolkit"
+import {getStores} from "../../redux/reducers/store"
 
 export default function SaleComponent({clientId}) {
 
@@ -29,9 +33,12 @@ export default function SaleComponent({clientId}) {
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
+    const [removeId, setId] = useState()
     const [createModal, setCreateModal] = useState(false)
+    const [isDelete, setDelete] = useState(false)
     const [filter, setFilter] = useState(false)
     const handleFilter = () => setFilter(!filter)
+    const toggleDelete = () => setDelete(!isDelete)
     const toggleCreate = () => setCreateModal(!createModal)
 
     useEffect(() => {
@@ -47,6 +54,8 @@ export default function SaleComponent({clientId}) {
     }, [clientId])
 
     useEffect(() => {
+        dispatch(getStores())
+
         history.push({
             search: qs.stringify({
                 ...query,
@@ -79,6 +88,16 @@ export default function SaleComponent({clientId}) {
             })
         }
     }, [])
+
+    const removeById = () => {
+        dispatch(deleteSale(removeId)).then(unwrapResult)
+            .then(() => {
+                toast.success(`${removeId} - tegishli savdo o'chirildi`)
+            })
+            .catch((err) => {
+                toast.error(`${err}`)
+            })
+    }
 
     return (
         <div>
@@ -167,10 +186,17 @@ export default function SaleComponent({clientId}) {
 
                                 </CardBody>
                                 <div
-                                    className="position-absolute top-0 d-flex justify-content-end w-100">
+                                    className="d-flex gap-1 align-items-center justify-content-end w-100 py-1 px-1">
                                     <a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>
-                                        <HiQrCode size={25}/>
+                                        <HiQrCode size={22}/>
                                     </a>
+                                    <Edit size={20} className={"cursor-pointer text-warning"}/>
+                                    <Trash size={20} className={"cursor-pointer text-danger"} onClick={() => {
+                                        setId(item?.id)
+                                        setTimeout(() => {
+                                            toggleDelete()
+                                        }, 500)
+                                    }}/>
                                 </div>
                             </Card>
                         </Col>
@@ -180,6 +206,7 @@ export default function SaleComponent({clientId}) {
             <CustomPagination size={sales.length} currentPage={Number(currentPage)} totalPages={pageCount}
                               total_count={totalCount} limit={limit}/>
             <FilterSales handleFilter={handleFilter} open={filter}/>
+            <DeleteModal toggleModal={toggleDelete} modal={isDelete} onFunction={removeById}/>
         </div>
     )
 }

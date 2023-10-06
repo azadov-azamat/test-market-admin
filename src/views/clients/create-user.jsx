@@ -14,7 +14,7 @@ export default function CreateUser({
                                    }) {
 
     const dispatch = useDispatch()
-    const {user} = useSelector(state => state.users)
+    const {client} = useSelector(state => state.users)
 
     const ValidateSchema = Yup.object().shape({
         clientName: Yup.string().required(INPUT_MSG),
@@ -25,17 +25,17 @@ export default function CreateUser({
 
     const formik = useFormik({
         initialValues: {
-            clientName: user?.clientName || '',
-            clientPhone: user?.clientPhone || '',
-            clientAdress: user?.clientAdress || '',
-            clientPaymentDate: user?.clientPaymentDate || ''
+            clientName: client?.clientName || '',
+            clientPhone: client?.clientPhone || '',
+            clientAdress: client?.clientAdress || '',
+            clientPaymentDate: client?.clientPaymentDate.substring(0, 10) || ''
         },
         enableReinitialize: true,
         validationSchema: ValidateSchema,
         onSubmit: (val) => {
-            if (user) {
+            if (client) {
                 const data = {
-                    id: user?.id,
+                    id: client?.id,
                     body: val
                 }
                 dispatch(patchClient(data)).then(unwrapResult).then(function () {
@@ -69,7 +69,7 @@ export default function CreateUser({
                 dispatch(setClient(null))
                 toggleModal()
             }}>
-                {user ? "Sotuvchini o'zgartirish" : "Sotuvchi qo'shish"}
+                {client ? "Sotuvchini o'zgartirish" : "Sotuvchi qo'shish"}
             </ModalHeader>
             <ModalBody>
                 <Form onSubmit={formik.handleSubmit}>
@@ -80,7 +80,7 @@ export default function CreateUser({
                                 <Input
                                     id={'clientName'}
                                     name={"clientName"}
-                                    defaultValue={user?.clientName}
+                                    defaultValue={client?.clientName}
                                     type={"text"}
                                     onChange={formik.handleChange}
                                 />
@@ -92,7 +92,7 @@ export default function CreateUser({
                                 <Input
                                     id={'clientPhone'}
                                     name={"clientPhone"}
-                                    defaultValue={user?.clientPhone}
+                                    defaultValue={client?.clientPhone}
                                     type={"text"}
                                     mask="99999999999"
                                     maskplaceholder=" "
@@ -107,7 +107,7 @@ export default function CreateUser({
                                 <Input
                                     id={'clientAdress'}
                                     name={"clientAdress"}
-                                    defaultValue={user?.clientAdress}
+                                    defaultValue={client?.clientAdress}
                                     type={"text"}
                                     onChange={formik.handleChange}
                                 />
@@ -119,7 +119,7 @@ export default function CreateUser({
                                 <Input
                                     id={'clientPaymentDate'}
                                     name={"clientPaymentDate"}
-                                    defaultValue={user?.clientPaymentDate}
+                                    defaultValue={client?.clientPaymentDate.substring(0, 10)}
                                     type={"date"}
                                     onChange={formik.handleChange}
                                 />
@@ -130,7 +130,7 @@ export default function CreateUser({
                     <div className="w-100 d-flex justify-content-end">
                         <Button disabled={!formik.isValid || !formik.dirty}
                                 color={"primary"}
-                                type={'submit'}>{user ? "O'zgartirish" : "Saqlash"}</Button>
+                                type={'submit'}>{client ? "O'zgartirish" : "Saqlash"}</Button>
                     </div>
                 </Form>
             </ModalBody>
