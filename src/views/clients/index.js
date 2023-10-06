@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Filter, Plus} from "react-feather"
+import {Download, Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
@@ -13,6 +13,7 @@ import CreateUser from "./create-user"
 import Select from "react-select"
 import FilterUser from "./Filter"
 import DateFormat from "../../components/DateFormat"
+import {BASE_URL} from "../../utility/Utils"
 
 export default function Clients() {
 
@@ -121,7 +122,7 @@ export default function Clients() {
         <div>
             <div className="d-flex align-items-center justify-content-between">
                 <h4>Ma'lumotlar</h4>
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1 align-items-center">
                     <div className="">
                         <Select
                             id="limit"
@@ -147,6 +148,12 @@ export default function Clients() {
                                 })
                             }}
                         />
+                    </div>
+                    <div
+                        className="">
+                        <a href={`${BASE_URL}/clients/file`} className={'cursor-pointer'}>
+                            <Download size={25}/>
+                        </a>
                     </div>
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
