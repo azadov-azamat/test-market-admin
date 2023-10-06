@@ -10,7 +10,8 @@ import {DownloadCloud, FileText, X} from 'react-feather'
 
 const FileUploaderSingle = ({
                                 title = 'Фото',
-                                setFile
+                                setFile,
+                                accept
                             }) => {
     // ** State
     const [files, setFiles] = useState([])
@@ -75,7 +76,7 @@ const FileUploaderSingle = ({
                 {
                     files.length === 0 && (
                         <div {...getRootProps({className: 'dropzone'})} className={"disabled cursor-not-allowed"}>
-                            <input {...getInputProps()} accept="image/*" />
+                            <input {...getInputProps()} accept={accept}/>
                             <div className="d-flex align-items-center justify-content-center flex-column disabled">
                                 <DownloadCloud size={64}/>
                                 <h5>Drop Files here or click to upload</h5>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Download, Filter, Plus} from "react-feather"
+import {Download, Filter, Plus, Upload} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
@@ -15,6 +15,7 @@ import Select from "react-select"
 import FilterProduct from "./Filter"
 import {BASE_URL} from "../../utility/Utils"
 import DownloadProduct from "./download-product"
+import UploadProduct from "./upload-product"
 
 export default function Product({storeId}) {
 
@@ -32,10 +33,12 @@ export default function Product({storeId}) {
     const {addresses} = useSelector(state => state.addresses)
 
     const [createModal, setCreateModal] = useState(false)
+    const [isUpload, setUpload] = useState(false)
     const [filter, setFilter] = useState(false)
     const [isDownload, setDownload] = useState(false)
     const handleFilter = () => setFilter(!filter)
     const handleDownload = () => setDownload(!isDownload)
+    const toggleUpload = () => setUpload(!isUpload)
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
@@ -176,6 +179,9 @@ export default function Product({storeId}) {
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
+                    <Button className="btn-icon" onClick={toggleUpload} outline color="primary">
+                        <Upload size={16}/>
+                    </Button>
                     <Button className="btn-icon" onClick={handleDownload} outline color="primary">
                         <Download size={16}/>
                     </Button>
@@ -196,6 +202,7 @@ export default function Product({storeId}) {
             </div>
             <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
             <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
+            <UploadProduct modal={isUpload} toggleModal={toggleUpload} storeId={storeId}/>
             <DownloadProduct toggleModal={handleDownload} modal={isDownload}/>
         </div>
     )

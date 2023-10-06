@@ -105,7 +105,7 @@ export default function CreateStore({
                     <Row xs={1}>
                         <Col>
                             <div className="mb-1">
-                                <FileUploaderSingle setFile={setFile} title={"Rasm yuklash"}/>
+                                <FileUploaderSingle setFile={setFile} title={"Rasm yuklash"} accept={"image/*"}/>
                             </div>
                         </Col>
                         <Col>
