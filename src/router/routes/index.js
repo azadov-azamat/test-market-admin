@@ -38,6 +38,19 @@ const Routes = [
         path: '/administrator/products',
         component: lazy(() => import('../../views/products')),
         exact: true
+    },
+    {
+        path: '/administrator/clients',
+        component: lazy(() => import('../../views/clients')),
+        exact: true
+    },
+    {
+        path: '/administrator/client/:id',
+        component: lazy(() => import('../../views/clients/view')),
+        exact: true,
+        meta: {
+            navLink: '/administrator/clients'
+        }
     }
 ]
 

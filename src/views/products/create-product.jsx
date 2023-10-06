@@ -9,7 +9,6 @@ import FileUploaderSingle from "../../components/FileUploaderSingle"
 import {useState} from "react"
 import Button from '../../components/Btn'
 import {uploadFile} from "../../redux/reducers/file"
-import {setStore} from "../../redux/reducers/store"
 import Select from "react-select"
 import {getAddresses} from "../../redux/reducers/address"
 
@@ -75,7 +74,7 @@ export default function CreateProduct({
                         }
                     }
                     dispatch(patchProduct(data)).then(unwrapResult).then(function () {
-                        dispatch(setStore(null))
+                        dispatch(setProduct(null))
                         setFile(null)
                         toggleModal()
                     })
@@ -90,6 +89,7 @@ export default function CreateProduct({
                     }
                     dispatch(createProduct(create)).then(unwrapResult).then(function () {
                         setFile(null)
+                        dispatch(setProduct(null))
                         toggleModal()
                     })
                 })
@@ -100,12 +100,18 @@ export default function CreateProduct({
     return (
         <Modal
             isOpen={modal}
-            toggle={toggleModal}
+            toggle={() => {
+                dispatch(setProduct(null))
+                toggleModal()
+            }}
             size={"lg"}
             className="modal-dialog-centered"
             // onClose/d={toggleModal}
         >
-            <ModalHeader toggle={toggleModal}>
+            <ModalHeader toggle={() => {
+                dispatch(setProduct(null))
+                toggleModal()
+            }}>
                 {product ? "Mahsulot o'zgartirish" : "Mahsulot qo'shish"}
             </ModalHeader>
             <ModalBody>
@@ -164,31 +170,6 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
-                        {/*<Col>*/}
-                        {/*    <div className="mb-1">*/}
-                        {/*        <Label className="form-label" for="storeId">*/}
-                        {/*            Do'kon tanlang*/}
-                        {/*        </Label>*/}
-                        {/*        <Select*/}
-                        {/*            id="storeId"*/}
-                        {/*            name="storeId"*/}
-                        {/*            placeholder="Tanlang..."*/}
-                        {/*            onFocus={() => {*/}
-                        {/*                dispatch(getStores())*/}
-                        {/*            }}*/}
-                        {/*            options={stores}*/}
-                        {/*            // defaultValue={{*/}
-                        {/*            //     label: currentItem?.active ? "active" : "inactive",*/}
-                        {/*            //     value: currentItem?.active*/}
-                        {/*            // }}*/}
-                        {/*            getOptionLabel={option => option.storeName}*/}
-                        {/*            getOptionValue={option => option.id}*/}
-                        {/*            onChange={(val) => {*/}
-                        {/*                formik.setFieldValue("storeId", val.id)*/}
-                        {/*            }}*/}
-                        {/*        />*/}
-                        {/*    </div>*/}
-                        {/*</Col>*/}
                         <Col>
                             <div className="mb-1">
                                 <Label className="form-label" for="adressId">

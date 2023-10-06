@@ -47,6 +47,22 @@ const getNameOf = (activityMap, id, locale) => {
     }
 }
 
+export function handleSwitchPayType(text) {
+    switch (text) {
+        case "debt-pay":
+            return "Qarz to'lovi"
+        case "terminal":
+            return "Terminal orqali"
+        case "naqd":
+            return "Naqd to'lov"
+        case "mixed-pay":
+            return "Aralash to'lov"
+        case "transfer":
+        default:
+            return "Online to'lov"
+    }
+}
+
 const getNameOfArr = (activityMap, arr, locale) => {
     const result = []
     for (const i in arr) {
@@ -71,7 +87,10 @@ const getNameOfArr = (activityMap, arr, locale) => {
 
 const isAllowed = (arr1, arr2) => arr1?.filter((o) => arr2?.indexOf(o) > -1)?.sort((a, b) => a - b)
 
-export const algoritmTree = ({activity_tree, allowed_ids}) => {
+export const algoritmTree = ({
+                                 activity_tree,
+                                 allowed_ids
+                             }) => {
     const tree = activity_tree?.tree
     const final = []
     const arr = []
@@ -126,11 +145,21 @@ const isToday = date => {
 }
 
 export const fCurrency = {
-    format: (value, {separator = ' ', precision = 0, decimal = '.', symbol = ''} = {}) => {
+    format: (value, {
+        separator = ' ',
+        precision = 0,
+        decimal = '.',
+        symbol = ''
+    } = {}) => {
         if (Number(value) === Math.floor(value)) {
             precision = 0
         }
-        return currency(value, {separator, precision, decimal, symbol}).format()
+        return currency(value, {
+            separator,
+            precision,
+            decimal,
+            symbol
+        }).format()
     },
     add: (value, addValue, {precision = 2} = {}) => {
         return String(currency(value, {precision}).add(addValue))
@@ -151,7 +180,11 @@ export const fCurrency = {
  * @param {String} value date to format
  * @param {Object} formatting Intl object to format with
  */
-export const formatDate = (value, formatting = {month: 'short', day: 'numeric', year: 'numeric'}) => {
+export const formatDate = (value, formatting = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+}) => {
     if (!value) return value
     return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
 }
@@ -159,10 +192,16 @@ export const formatDate = (value, formatting = {month: 'short', day: 'numeric', 
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
     const date = new Date(value)
-    let formatting = {month: 'short', day: 'numeric'}
+    let formatting = {
+        month: 'short',
+        day: 'numeric'
+    }
 
     if (toTimeForCurrentDay && isToday(date)) {
-        formatting = {hour: 'numeric', minute: 'numeric'}
+        formatting = {
+            hour: 'numeric',
+            minute: 'numeric'
+        }
     }
 
     return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))

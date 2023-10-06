@@ -7,6 +7,8 @@ import stores from './reducers/store'
 import addresses from './reducers/address'
 import products from './reducers/product'
 import files from './reducers/file'
+import sales from './reducers/sale'
+import debts from './reducers/debt'
 
 const rootReducer = {
   auth,
@@ -16,7 +18,9 @@ const rootReducer = {
   addresses,
   products,
   stores,
-  files
+  files,
+  debts,
+  sales
 }
 
 export default rootReducer

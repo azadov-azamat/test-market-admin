@@ -75,6 +75,7 @@ export default function CreateStore({
                     }
                     dispatch(createStore(create)).then(unwrapResult).then(function () {
                         setFile(null)
+                        dispatch(setStore(null))
                         toggleModal()
                     })
                 })
@@ -85,12 +86,18 @@ export default function CreateStore({
     return (
         <Modal
             isOpen={modal}
-            toggle={toggleModal}
+            toggle={() => {
+                dispatch(setStore(null))
+                toggleModal()
+            }}
             size={"lg"}
             className="modal-dialog-centered"
             // onClose/d={toggleModal}
         >
-            <ModalHeader toggle={toggleModal}>
+            <ModalHeader toggle={() => {
+                dispatch(setStore(null))
+                toggleModal()
+            }}>
                 {store ? "Do'kon o'zgartirish" : "Do'kon qo'shish"}
             </ModalHeader>
             <ModalBody>

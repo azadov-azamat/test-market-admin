@@ -5,7 +5,7 @@ import * as Yup from "yup"
 
 import ReactInputMask from "react-input-mask"
 import {INPUT_MSG} from "../../utility/Utils"
-import {createUser, patchUser, setUser} from "../../redux/reducers/user"
+import {createClient, patchClient, setUser} from "../../redux/reducers/user"
 import {unwrapResult} from "@reduxjs/toolkit"
 
 export default function CreateUser({
@@ -17,15 +17,18 @@ export default function CreateUser({
     const {user} = useSelector(state => state.users)
 
     const ValidateSchema = Yup.object().shape({
-        sellerName: Yup.string().required(INPUT_MSG),
-        sellerPhone: Yup.string().required(INPUT_MSG)
+        clientName: Yup.string().required(INPUT_MSG),
+        clientPaymentDate: Yup.string().required(INPUT_MSG),
+        clientAdress: Yup.string().required(INPUT_MSG),
+        clientPhone: Yup.string().required(INPUT_MSG)
     })
 
     const formik = useFormik({
         initialValues: {
-            sellerName: user?.sellerName || '',
-            sellerPhone: user?.sellerPhone || '',
-            sellerRole: 'seller'
+            clientName: user?.clientName || '',
+            clientPhone: user?.clientPhone || '',
+            clientAdress: user?.clientAdress || '',
+            clientPaymentDate: user?.clientPaymentDate || ''
         },
         enableReinitialize: true,
         validationSchema: ValidateSchema,
@@ -35,12 +38,12 @@ export default function CreateUser({
                     id: user?.id,
                     body: val
                 }
-                dispatch(patchUser(data)).then(unwrapResult).then(function () {
+                dispatch(patchClient(data)).then(unwrapResult).then(function () {
                     dispatch(setUser(null))
                     toggleModal()
                 })
             } else {
-                dispatch(createUser(val)).then(unwrapResult).then(function () {
+                dispatch(createClient(val)).then(unwrapResult).then(function () {
                     dispatch(setUser(null))
                     toggleModal()
                 })
@@ -49,7 +52,7 @@ export default function CreateUser({
     })
 
     function pinChange(e) {
-        formik.setFieldValue('sellerPhone', e.target.value.replace(/_/g, ''))
+        formik.setFieldValue('clientPhone', e.target.value.replace(/_/g, ''))
     }
 
     return (
@@ -70,14 +73,14 @@ export default function CreateUser({
             </ModalHeader>
             <ModalBody>
                 <Form onSubmit={formik.handleSubmit}>
-                    <Row xs={user ? 2 : 3}>
+                    <Row xs={2}>
                         <Col>
                             <div className="mb-1">
-                                <Label for={"sellerName"}>F.I.O *</Label>
+                                <Label for={"clientName"}>F.I.O *</Label>
                                 <Input
-                                    id={'sellerName'}
-                                    name={"sellerName"}
-                                    defaultValue={user?.sellerName}
+                                    id={'clientName'}
+                                    name={"clientName"}
+                                    defaultValue={user?.clientName}
                                     type={"text"}
                                     onChange={formik.handleChange}
                                 />
@@ -85,11 +88,11 @@ export default function CreateUser({
                         </Col>
                         <Col>
                             <div className="mb-1">
-                                <Label for={"sellerPhone"}>Telefon raqami *</Label>
+                                <Label for={"clientPhone"}>Telefon raqami *</Label>
                                 <Input
-                                    id={'sellerPhone'}
-                                    name={"sellerPhone"}
-                                    defaultValue={user?.sellerPhone}
+                                    id={'clientPhone'}
+                                    name={"clientPhone"}
+                                    defaultValue={user?.clientPhone}
                                     type={"text"}
                                     mask="99999999999"
                                     maskplaceholder=" "
@@ -100,11 +103,24 @@ export default function CreateUser({
                         </Col>
                         <Col>
                             <div className="mb-1">
-                                <Label for={"sellerPassword"}>Parol *</Label>
+                                <Label for={"clientAdress"}>Manzili *</Label>
                                 <Input
-                                    id={'sellerPassword'}
-                                    name={"sellerPassword"}
+                                    id={'clientAdress'}
+                                    name={"clientAdress"}
+                                    defaultValue={user?.clientAdress}
                                     type={"text"}
+                                    onChange={formik.handleChange}
+                                />
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="mb-1">
+                                <Label for={"clientPaymentDate"}>To'lov sanasi *</Label>
+                                <Input
+                                    id={'clientPaymentDate'}
+                                    name={"clientPaymentDate"}
+                                    defaultValue={user?.clientPaymentDate}
+                                    type={"date"}
                                     onChange={formik.handleChange}
                                 />
                             </div>

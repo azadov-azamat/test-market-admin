@@ -1,5 +1,5 @@
 import React from 'react'
-import {Users} from 'react-feather'
+import {Circle, Users} from 'react-feather'
 import {MdOutlineEditLocationAlt, MdProductionQuantityLimits} from "react-icons/md"
 import {BiStore} from "react-icons/bi"
 
@@ -8,7 +8,20 @@ const adminNavigation = [
         id: 'members',
         title: 'Foydalanuvchilar',
         icon: <Users size={20}/>,
-        navLink: '/administrator/users'
+        children: [
+            {
+                id: 'members',
+                title: 'Xodimlar',
+                icon: <Circle size={20}/>,
+                navLink: '/administrator/users'
+            },
+            {
+                id: 'members',
+                title: 'Mijozlar',
+                icon: <Circle size={20}/>,
+                navLink: '/administrator/clients'
+            }
+        ]
     },
     {
         id: 'stores',

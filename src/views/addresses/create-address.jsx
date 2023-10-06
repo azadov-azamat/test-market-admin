@@ -45,12 +45,18 @@ export default function CreateAddress({
     return (
         <Modal
             isOpen={modal}
-            toggle={toggleModal}
+            toggle={() => {
+                dispatch(setAddress(null))
+                toggleModal()
+            }}
             size={"lg"}
             className="modal-dialog-centered"
             // onClose/d={toggleModal}
         >
-            <ModalHeader toggle={toggleModal}>
+            <ModalHeader toggle={() => {
+                dispatch(setAddress(null))
+                toggleModal()
+            }}>
                 {address ? "Manzil o'zgartirish" : "Manzil qo'shish"}
             </ModalHeader>
             <ModalBody>
