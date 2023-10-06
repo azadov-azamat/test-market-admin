@@ -11,6 +11,8 @@ import Button from '../../components/Btn'
 import {uploadFile} from "../../redux/reducers/file"
 import Select from "react-select"
 import {getAddresses} from "../../redux/reducers/address"
+import {XCircle} from "react-feather"
+import {toast} from "react-toastify"
 
 export default function CreateProduct({
                                           toggleModal,
@@ -26,6 +28,7 @@ export default function CreateProduct({
     const {addresses} = useSelector(state => state.addresses)
 
     const [file, setFile] = useState(null)
+    const [editImg, setEditImg] = useState(false)
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
@@ -34,6 +37,13 @@ export default function CreateProduct({
         adressId: Yup.string().required(INPUT_MSG),
         productMeasure: Yup.string().required(INPUT_MSG)
     })
+
+    const toggleCancel = () => {
+        setFile(null)
+        setEditImg(false)
+        dispatch(setProduct(null))
+        toggleModal()
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -60,9 +70,7 @@ export default function CreateProduct({
                             }
                         }
                         dispatch(patchProduct(data)).then(unwrapResult).then(function () {
-                            dispatch(setProduct(null))
-                            setFile(null)
-                            toggleModal()
+                            toggleCancel()
                         })
                     })
                 } else {
@@ -74,12 +82,11 @@ export default function CreateProduct({
                         }
                     }
                     dispatch(patchProduct(data)).then(unwrapResult).then(function () {
-                        dispatch(setProduct(null))
-                        setFile(null)
-                        toggleModal()
+                        toggleCancel()
                     })
                 }
             } else {
+                if (!file) return toast.error("Rasm biriktirilmagan!")
                 const data = new FormData()
                 data.append("file", file)
                 dispatch(uploadFile(data)).then(unwrapResult).then(res => {
@@ -88,9 +95,7 @@ export default function CreateProduct({
                         ...val
                     }
                     dispatch(createProduct(create)).then(unwrapResult).then(function () {
-                        setFile(null)
-                        dispatch(setProduct(null))
-                        toggleModal()
+                        toggleCancel()
                     })
                 })
             }
@@ -100,27 +105,24 @@ export default function CreateProduct({
     return (
         <Modal
             isOpen={modal}
-            toggle={() => {
-                dispatch(setProduct(null))
-                toggleModal()
-            }}
+            toggle={toggleCancel}
             size={"lg"}
             className="modal-dialog-centered"
-            // onClose/d={toggleModal}
         >
-            <ModalHeader toggle={() => {
-                dispatch(setProduct(null))
-                toggleModal()
-            }}>
+            <ModalHeader toggle={toggleCancel}>
                 {product ? "Mahsulot o'zgartirish" : "Mahsulot qo'shish"}
             </ModalHeader>
             <ModalBody>
                 <Form onSubmit={formik.handleSubmit}>
                     <Row xs={1}>
                         <Col>
-                            <div className="mb-1">
+                            {!product?.productImgUrl || editImg ? <div className="mb-1">
                                 <FileUploaderSingle setFile={setFile} title={"Rasm yuklash"} accept={"image/*"}/>
-                            </div>
+                            </div> : <div className={"d-flex justify-content-center position-relative"}>
+                                <img width={200} src={product?.productImgUrl} className={"mt-2"} alt={product?.productName}/>
+                                <XCircle onClick={() => setEditImg(true)} size={25}
+                                         className={"text-danger cursor-pointer"}/>
+                            </div>}
                         </Col>
                         <Col>
                             <div className="mb-1">
