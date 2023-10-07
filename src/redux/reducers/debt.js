@@ -62,7 +62,7 @@ export const debtsSlice = createSlice({
         totalCount: 0
     },
     reducers: {
-        setStore: (state, action) => {
+        setDebt: (state, action) => {
             state.debt = action.payload
         }
     },
@@ -133,6 +133,6 @@ export const debtsSlice = createSlice({
     }
 })
 
-export const {setStore} = debtsSlice.actions
+export const {setDebt} = debtsSlice.actions
 
 export default debtsSlice.reducer
