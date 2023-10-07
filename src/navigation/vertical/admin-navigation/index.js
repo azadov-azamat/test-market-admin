@@ -3,6 +3,7 @@ import {Circle, Users} from 'react-feather'
 import {MdOutlineEditLocationAlt, MdProductionQuantityLimits} from "react-icons/md"
 import {BiStore} from "react-icons/bi"
 import {GiPayMoney} from "react-icons/gi"
+import {PiContactlessPaymentLight} from "react-icons/pi"
 
 const adminNavigation = [
     {
@@ -47,6 +48,12 @@ const adminNavigation = [
         title: 'Manzillar',
         icon: <MdOutlineEditLocationAlt size={20}/>,
         navLink: '/administrator/addresses'
+    },
+    {
+        id: 'payments',
+        title: "To'lovlar",
+        icon: <PiContactlessPaymentLight size={20}/>,
+        navLink: '/administrator/payments'
     }
 ]
 

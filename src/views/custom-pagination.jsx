@@ -14,11 +14,10 @@ export default function CustomPagination({
     const location = useLocation()
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
-    console.log(currentPage)
-    const startIndex = (currentPage === 1 ? currentPage : ((currentPage - 1) * limit))
+    const startIndex = (currentPage === 1 ? (currentPage - 1) : ((currentPage - 1) * limit)) + 1
     const lastIndex = startIndex + (size - 1)
     const handlePaginate = (page) => {
-        console.log(page.selected)
+
         history.push({
             pathname: location.pathname,
             search: qs.stringify({

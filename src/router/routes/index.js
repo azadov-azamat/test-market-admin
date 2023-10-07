@@ -63,7 +63,20 @@ const Routes = [
         meta: {
             navLink: '/administrator/sales'
         }
+    },
+    {
+        path: '/administrator/payments',
+        component: lazy(() => import('../../views/payments')),
+        exact: true
     }
+    // {
+    //     path: '/administrator/payment/:id',
+    //     component: lazy(() => import('../../views/payments/view')),
+    //     exact: true,
+    //     meta: {
+    //         navLink: '/administrator/payments'
+    //     }
+    // }
 ]
 
 export {DefaultRoute, TemplateTitle, Routes}

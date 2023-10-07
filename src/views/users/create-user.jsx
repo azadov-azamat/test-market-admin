@@ -97,17 +97,11 @@ export default function CreateUser({
     return (
         <Modal
             isOpen={modal}
-            toggle={() => {
-                dispatch(setUser(null))
-                toggleModal()
-            }}
+            toggle={toggleCancel}
             size={"lg"}
             className="modal-dialog-centered"
         >
-            <ModalHeader toggle={() => {
-                dispatch(setUser(null))
-                toggleModal()
-            }}>
+            <ModalHeader toggle={toggleCancel}>
                 {user ? "Sotuvchini o'zgartirish" : "Sotuvchi qo'shish"}
             </ModalHeader>
             <ModalBody>

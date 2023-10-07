@@ -6,13 +6,13 @@ import DataTable from 'react-data-table-component'
 import {Card, CardBody} from 'reactstrap'
 import "../assets/scss/Table.scss"
 
-const TableComponent = ({ref, data, total_count, columns, currentPage, totalPages, size, ...rest}) => {
+const TableComponent = ({ref, data, total_count, columns, currentPage, totalPages, limit, size, ...rest}) => {
 
     const history = useHistory()
     const location = useLocation()
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
-    const startIndex = currentPage === 1 ? currentPage : (currentPage * 10)
+    const startIndex = (currentPage === 1 ? (currentPage - 1) : ((currentPage - 1) * limit)) + 1
     const lastIndex = startIndex + (size - 1)
 
     const handleSort = (column) => {
