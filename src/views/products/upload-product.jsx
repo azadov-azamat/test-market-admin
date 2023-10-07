@@ -11,6 +11,7 @@ import {uploadFile} from "../../redux/reducers/file"
 import {unwrapResult} from "@reduxjs/toolkit"
 import * as Yup from "yup"
 import Button from "../../components/Btn"
+import {createProductFile} from "../../redux/reducers/product"
 
 export default function UploadProduct({
                                           toggleModal,
@@ -23,39 +24,39 @@ export default function UploadProduct({
     const {isLoading} = useSelector(state => state.products)
     const [file, setFile] = useState(null)
 
-
-    console.log(file)
     const ValidateSchema = Yup.object().shape({
         adressId: Yup.string().required(INPUT_MSG)
     })
 
     const formik = useFormik({
-        initialValues: {
-            storeId,
-            adressId: ''
-        },
-        enableReinitialize: true,
-        validationSchema: ValidateSchema,
-        onSubmit: (val) => {
-            if (file !== null) {
-                toast.error("Fayl biriktirilmagan")
-            } else {
-                const file = new FormData()
-                file.append("file", file)
-                dispatch(uploadFile(file)).then(unwrapResult).then(res => {
+            initialValues: {
+                storeId,
+                adressId: ''
+            },
+            enableReinitialize: true,
+            validationSchema: ValidateSchema,
+            onSubmit: (val) => {
+                if (file === null) return toast.error("Fayl biriktirilmagan")
+
+                const formD = new FormData()
+                formD.append("file", file)
+                dispatch(uploadFile(formD)).then(unwrapResult).then(res => {
                     const data = {
-                        url: res.url,
-                        ...val
+                        addressId: val?.adressId,
+                        body: {
+                            url: res?.url,
+                            storeId
+                        }
                     }
-                    console.log(data)
-                    // dispatch(patchStore(data)).then(unwrapResult).then(function () {
-                    setFile(null)
-                    toggleModal()
-                    // })
+                    dispatch(createProductFile(data)).then(unwrapResult).then(function () {
+                        setFile(null)
+                        toast.success("Saqlandi")
+                        toggleModal()
+                    })
                 })
             }
         }
-    })
+    )
 
     return (
         <Modal
