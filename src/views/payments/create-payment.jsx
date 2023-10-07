@@ -174,10 +174,10 @@ export default function CreatePayment({
                                                 name="clientId"
                                                 placeholder="Mijoz biriktirish..."
                                                 options={clients}
-                                                // value={{
-                                                //     value: item.clientId,
-                                                //     label: clients.find(cl => cl.id === item.clientId)?.clientName
-                                                // }}
+                                                defaultValue={{
+                                                    value: item.clientId,
+                                                    label: clients.find(cl => cl.id === item.clientId)?.clientName
+                                                }}
                                                 getOptionLabel={option => option.clientName}
                                                 getOptionValue={option => option.id}
                                                 onChange={(e) => {
@@ -195,10 +195,10 @@ export default function CreatePayment({
                                                 name="saleId"
                                                 placeholder="Savdo biriktirish..."
                                                 options={sales}
-                                                // value={{
-                                                //     value: item.saleId,
-                                                //     label: sales.find(cl => cl.id === item.saleId)?.id
-                                                // }}
+                                                defaultValue={{
+                                                    value: item.saleId,
+                                                    label: sales.find(cl => cl.id === item.saleId)?.id
+                                                }}
                                                 getOptionLabel={option => option.id}
                                                 getOptionValue={option => option.id}
                                                 onChange={(e) => {
