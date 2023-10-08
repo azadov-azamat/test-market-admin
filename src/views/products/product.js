@@ -5,7 +5,6 @@ import {Download, Filter, Plus, Upload} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
-import {BsEye} from "react-icons/bs"
 import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
 import CreateProduct from "./create-product"
@@ -13,7 +12,6 @@ import {deleteProduct, getProducts, setProduct} from "../../redux/reducers/produ
 import {getAddresses} from "../../redux/reducers/address"
 import Select from "react-select"
 import FilterProduct from "./Filter"
-import {BASE_URL} from "../../utility/Utils"
 import DownloadProduct from "./download-product"
 import UploadProduct from "./upload-product"
 
@@ -44,18 +42,15 @@ export default function Product({storeId}) {
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
     useEffect(() => {
-        if (storeId) {
-            history.push({
-                search: qs.stringify({
-                    filter: {storeId}
-                })
-            })
+        if (location.search) {
+            dispatch(getProducts({...query,  filter: {storeId}}))
+        } else {
+            dispatch(getProducts({
+                limit: 10,
+                filter: {storeId}
+            }))
         }
-    }, [storeId])
-
-    useEffect(() => {
-        dispatch(getProducts({...query}))
-    }, [location])
+    }, [location, storeId])
 
     useEffect(() => {
         dispatch(getAddresses())
@@ -164,10 +159,14 @@ export default function Product({storeId}) {
                             getOptionLabel={option => option.value}
                             getOptionValue={option => option.value}
                             onChange={(val) => {
+                                const data = {
+                                    limit: query?.limit || 0,
+                                    ...query
+                                }
+                                data.limit = val.value
                                 history.push({
                                     search: qs.stringify({
-                                        limit: val?.value,
-                                        ...query
+                                        ...data
                                     })
                                 })
                             }}

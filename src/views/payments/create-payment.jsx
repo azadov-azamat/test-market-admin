@@ -10,7 +10,8 @@ import {getSales} from "../../redux/reducers/sale"
 
 export default function CreatePayment({
                                           toggleModal,
-                                          modal
+                                          modal,
+                                          storeId
                                       }) {
 
     const dispatch = useDispatch()
@@ -19,18 +20,25 @@ export default function CreatePayment({
 
     const {payment} = useSelector(state => state.payments)
 
-    const [inputFields, setInputFields] = useState([
-        {
-            paymentAmount: 0,
-            paymentType: "transfer",
-            clientId: null,
-            saleId: null
-        }
-    ])
+    const [inputFields, setInputFields] = useState([])
 
     useEffect(() => {
-        dispatch(getClients({limit: "all"}))
-        dispatch(getSales({limit: "all"}))
+        if (storeId) {
+            setInputFields([
+                {
+                    paymentAmount: 0,
+                    paymentType: "transfer",
+                    clientId: null,
+                    saleId: null,
+                    storeId
+                }
+            ])
+        }
+    }, [storeId])
+
+    useEffect(() => {
+        dispatch(getClients())
+        dispatch(getSales())
     }, [])
 
     useEffect(() => {
@@ -59,7 +67,8 @@ export default function CreatePayment({
             paymentType: "transfer",
             clientId: null,
             saleId: null,
-            paymentAmount: 0
+            paymentAmount: 0,
+            storeId
         })
         setInputFields(list)
     }
@@ -76,11 +85,13 @@ export default function CreatePayment({
                 paymentAmount: 0,
                 paymentType: "transfer",
                 clientId: null,
-                saleId: null
+                saleId: null,
+                storeId
             }
         ])
         toggleModal()
     }
+    console.log(inputFields)
 
     function SavePayments() {
         if (payment) {
@@ -98,7 +109,6 @@ export default function CreatePayment({
         }
     }
 
-    console.log(inputFields)
     return (
         <Modal
             isOpen={modal}
@@ -118,7 +128,7 @@ export default function CreatePayment({
                         return (
                             <Row key={ind} className={"align-items-end mb-2"}>
                                 <Col xs={10} className={""}>
-                                    <div class="d-flex flex-md-row flex-column gap-1">
+                                    <div className="d-flex flex-md-row flex-column gap-1">
                                         <div className="w-100">
                                             <Label for={"paymentAmount"}>To'lov summasi *</Label>
                                             <Input
@@ -164,7 +174,7 @@ export default function CreatePayment({
                                             />
                                         </div>
                                     </div>
-                                    <div class="d-flex flex-md-row flex-column gap-1">
+                                    <div className="d-flex flex-md-row flex-column gap-1">
                                         <div className="w-100">
                                             <Label className="form-label" for="clientId">
                                                 Mijoz tanlash
@@ -211,7 +221,7 @@ export default function CreatePayment({
                                 </Col>
                                 {!payment && <Col xs={2}>
                                     <div
-                                        class="d-flex flex-md-row flex-column align-items-center gap-1 justify-content-end">
+                                        className="d-flex flex-md-row flex-column align-items-center gap-1 justify-content-end">
                                         {inputFields.length > 1 &&
                                             <Button onClick={() => handleRemove(ind)} color={"danger"}
                                                     className={"font-small-4"}>x</Button>}

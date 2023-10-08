@@ -155,7 +155,7 @@ const FilterSales = ({
                             id="clientId"
                             name="clientId"
                             onFocus={() => {
-                                dispatch(getClients({limit: 'all'}))
+                                dispatch(getClients())
                             }}
                             placeholder="Qarzdor tanlang..."
                             options={clients}
@@ -175,7 +175,7 @@ const FilterSales = ({
                             id="sellerId"
                             name="sellerId"
                             onFocus={() => {
-                                dispatch(getUsers({limit: 'all'}))
+                                dispatch(getUsers())
                             }}
                             placeholder="Sotuvchi tanlang..."
                             options={users}

@@ -34,12 +34,12 @@ export default function SaleComponent({clientId}) {
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
     const [removeId, setId] = useState()
-    const [createModal, setCreateModal] = useState(false)
+    // const [createModal, setCreateModal] = useState(false)
     const [isDelete, setDelete] = useState(false)
     const [filter, setFilter] = useState(false)
     const handleFilter = () => setFilter(!filter)
     const toggleDelete = () => setDelete(!isDelete)
-    const toggleCreate = () => setCreateModal(!createModal)
+    // const toggleCreate = () => setCreateModal(!createModal)
 
     useEffect(() => {
         if (clientId !== undefined) {
@@ -59,7 +59,7 @@ export default function SaleComponent({clientId}) {
         history.push({
             search: qs.stringify({
                 ...query,
-                limit
+                limit: 10
             })
         })
     }, [])
@@ -68,9 +68,9 @@ export default function SaleComponent({clientId}) {
         if (location.search) {
             dispatch(getSales({...query}))
         } else {
-            setTimeout(() => {
-                dispatch(getSales({}))
-            }, 1000)
+            // setTimeout(() => {
+                dispatch(getSales({limit: 10}))
+            // }, 1000)
         }
     }, [location])
 
@@ -134,9 +134,9 @@ export default function SaleComponent({clientId}) {
                         <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                             <Filter size={16}/>
                         </Button>
-                        <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
-                            <Plus size={16}/>
-                        </Button>
+                        {/*<Button className="btn-icon" onClick={toggleCreate} outline color="primary">*/}
+                        {/*    <Plus size={16}/>*/}
+                        {/*</Button>*/}
                     </div>
                 </div>}
             <Row md={2} xl={3} className={"row-cols-1"}>
@@ -193,7 +193,7 @@ export default function SaleComponent({clientId}) {
                                     <a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>
                                         <HiQrCode size={22}/>
                                     </a>
-                                    <Edit size={20} className={"cursor-pointer text-warning"}/>
+                                    {/*<Edit size={20} className={"cursor-pointer text-warning"}/>*/}
                                     <Trash size={20} className={"cursor-pointer text-danger"} onClick={() => {
                                         setId(item?.id)
                                         setTimeout(() => {

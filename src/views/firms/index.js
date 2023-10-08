@@ -133,10 +133,14 @@ export default function Firms() {
                             getOptionLabel={option => option.value}
                             getOptionValue={option => option.value}
                             onChange={(val) => {
+                                const data = {
+                                   limit: query?.limit || 0,
+                                   ...query
+                               }
+                                data.limit = val.value
                                 history.push({
                                     search: qs.stringify({
-                                        limit: val?.value,
-                                        ...query
+                                        ...data
                                     })
                                 })
                             }}

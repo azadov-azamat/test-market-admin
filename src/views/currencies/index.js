@@ -37,7 +37,7 @@ export default function Currencies({firmId}) {
     useEffect(() => {
 
         if (location.search) {
-            dispatch(getCurrencies({...query}))
+            dispatch(getCurrencies({...query, filter: JSON.stringify({firmId})}))
         } else {
             dispatch(getCurrencies({filter: JSON.stringify({firmId})}))
         }
@@ -124,10 +124,14 @@ export default function Currencies({firmId}) {
                             getOptionLabel={option => option.value}
                             getOptionValue={option => option.value}
                             onChange={(val) => {
+                                const data = {
+                                   limit: query?.limit || 0,
+                                   ...query
+                               }
+                                data.limit = val.value
                                 history.push({
                                     search: qs.stringify({
-                                        limit: val?.value,
-                                        ...query
+                                        ...data
                                     })
                                 })
                             }}

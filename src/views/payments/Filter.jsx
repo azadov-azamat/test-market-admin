@@ -31,6 +31,7 @@ const FilterPayment = ({
                 search: qs.stringify({
                     ...query,
                     ...data,
+                    limit: 10,
                     filter: JSON.stringify({
                         ...val
                     })
@@ -43,7 +44,9 @@ const FilterPayment = ({
 
     function clearable() {
         history.push({
-            search: ""
+            search: qs.stringify({
+                limit: 10
+            })
         })
     }
 
@@ -99,46 +102,6 @@ const FilterPayment = ({
                             }}
                         />
                     </div>
-                    {/*{formik.values?.saleDebt && <div className="mb-1">*/}
-                    {/*    <Label className="form-label" for="clientId">*/}
-                    {/*        Qarzdor*/}
-                    {/*    </Label>*/}
-                    {/*    <Select*/}
-                    {/*        id="clientId"*/}
-                    {/*        name="clientId"*/}
-                    {/*        onFocus={() => {*/}
-                    {/*            dispatch(getClients({limit: 'all'}))*/}
-                    {/*        }}*/}
-                    {/*        placeholder="Qarzdor tanlang..."*/}
-                    {/*        options={clients}*/}
-
-                    {/*        getOptionLabel={option => option.clientName}*/}
-                    {/*        getOptionValue={option => option.id}*/}
-                    {/*        onChange={(val) => {*/}
-                    {/*            formik.setFieldValue("clientId", val.id)*/}
-                    {/*        }}*/}
-                    {/*    />*/}
-                    {/*</div>}*/}
-                    {/*<div className="mb-1">*/}
-                    {/*    <Label className="form-label" for="sellerId">*/}
-                    {/*        Sotuvchi*/}
-                    {/*    </Label>*/}
-                    {/*    <Select*/}
-                    {/*        id="sellerId"*/}
-                    {/*        name="sellerId"*/}
-                    {/*        onFocus={() => {*/}
-                    {/*            dispatch(getUsers({limit: 'all'}))*/}
-                    {/*        }}*/}
-                    {/*        placeholder="Sotuvchi tanlang..."*/}
-                    {/*        options={users}*/}
-
-                    {/*        getOptionLabel={option => option.sellerName}*/}
-                    {/*        getOptionValue={option => option.id}*/}
-                    {/*        onChange={(val) => {*/}
-                    {/*            formik.setFieldValue("sellerId", val.id)*/}
-                    {/*        }}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
                     <div className={"mb-1"}>
                         <Label className="form-label" for="date_apply_from">
                             Boshlang`ich vaqt

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
 import {Filter, Plus} from "react-feather"
-import {Button} from "reactstrap"
+import {Button, Card, CardBody, Nav, NavItem, NavLink, TabContent, TabPane} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {useHistory, useLocation} from "react-router-dom"
@@ -12,6 +12,7 @@ import Select from "react-select"
 import {deletePayment, getPayments, setPayment} from "../../redux/reducers/payment"
 import {handleSwitchPayType} from "../../utility/Utils"
 import FilterPayment from "./Filter"
+import {getStores} from "../../redux/reducers/store"
 
 export default function Payments() {
 
@@ -26,6 +27,7 @@ export default function Payments() {
         totalCount,
         isLoading
     } = useSelector(state => state.payments)
+    const {stores} = useSelector(state => state.stores)
 
     const [createModal, setCreateModal] = useState(false)
     const [filter, setFilter] = useState(false)
@@ -35,22 +37,38 @@ export default function Payments() {
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
-    // useEffect(() => {
-    //     if (payments) {
-    //         let num = 0
-    //         payments.forEach(item => {
-    //             num += item?.paymentAmount
-    //         })
-    //         setAmount(num)
-    //     }
-    // }, [payments])
+    const [active, setActive] = useState(null)
+
+    const toggle = tab => {
+        if (active !== tab) {
+            setActive(tab)
+        }
+    }
+
+    useEffect(() => {
+        if (active) {
+            history.push({
+                search: qs.stringify({
+                    filter: JSON.stringify({
+                        storeId: active
+                    })
+                })
+            })
+        }
+    }, [active])
 
     useEffect(() => {
         if (location.search) {
             dispatch(getPayments({...query}))
-        } else {
-            dispatch(getPayments())
         }
+        // else {
+        //     dispatch(getPayments({
+        //         limit: 10,
+        //         filter: JSON.stringify({
+        //             storeId: active
+        //         })
+        //     }))
+        // }
     }, [location])
 
     function editPayment(currentUser) {
@@ -58,15 +76,12 @@ export default function Payments() {
         toggleCreate()
     }
 
+    useEffect(() => {
+        dispatch(getStores())
+    }, [])
+
 
     const basicColumns = [
-        // {
-        //     width: '50px',
-        //     wrap: true,
-        //     cell: () => <>
-        //         <BsEye className={'text-success cursor-pointer'} size={20}/>
-        //     </>
-        // },
         {
             name: "Summa",
             width: '200px',
@@ -113,58 +128,92 @@ export default function Payments() {
 
     return (
         <div>
-            <div className="d-flex align-items-center justify-content-between">
-                <h4>Ma'lumotlar</h4>
-                <div className="d-flex gap-1">
-                    <div className="">
-                        <Select
-                            id="limit"
-                            name="limit"
-                            options={[
-                                {value: 10},
-                                {value: 15},
-                                {value: 20},
-                                {value: 25}
-                            ]}
-                            defaultValue={{
-                                label: limit,
-                                value: limit
-                            }}
-                            getOptionLabel={option => option.value}
-                            getOptionValue={option => option.value}
-                            onChange={(val) => {
-                                history.push({
-                                    search: qs.stringify({
-                                        limit: val?.value,
-                                        ...query
-                                    })
-                                })
-                            }}
+            <Card>
+                <CardBody>
+                    <Nav className="justify-content-center" tabs>
+                        {
+                            stores.map(({
+                                            storeName,
+                                            id
+                                        }, ind) => {
+                                    return (
+                                        <NavItem key={ind}>
+                                            <NavLink
+                                                active={active === id}
+                                                onClick={() => {
+                                                    toggle(id)
+                                                }}
+                                            >
+                                                {storeName}
+                                            </NavLink>
+                                        </NavItem>
+                                    )
+                                }
+                            )
+                        }
+                    </Nav>
+                </CardBody>
+            </Card>
+            <TabContent className="py-50" activeTab={active}>
+                {active !== null && <TabPane tabId={active}>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <h4>Ma'lumotlar</h4>
+                        <div className="d-flex gap-1">
+                            <div className="">
+                                <Select
+                                    id="limit"
+                                    name="limit"
+                                    options={[
+                                        {value: 10},
+                                        {value: 15},
+                                        {value: 20},
+                                        {value: 25}
+                                    ]}
+                                    defaultValue={{
+                                        label: limit,
+                                        value: limit
+                                    }}
+                                    getOptionLabel={option => option.value}
+                                    getOptionValue={option => option.value}
+                                    onChange={(val) => {
+                                        const data = {
+                                            limit: query?.limit || 0,
+                                            ...query
+                                        }
+                                        data.limit = val.value
+                                        history.push({
+                                            search: qs.stringify({
+                                                ...data
+                                            })
+                                        })
+                                    }}
+                                />
+                            </div>
+                            <Button onClick={handleFilter} className="btn-icon" outline color="primary">
+                                <Filter size={16}/>
+                            </Button>
+                            <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
+                                <Plus size={16}/>
+                            </Button>
+                        </div>
+                    </div>
+                    <div>
+                        <TableComponent
+                            progressPending={isLoading}
+                            data={payments}
+                            columns={basicColumns}
+                            size={payments.length}
+                            limit={limit}
+                            sortServer
+                            totalPages={pageCount}
+                            currentPage={currentPage}
+                            total_count={totalCount}
                         />
                     </div>
-                    <Button onClick={handleFilter} className="btn-icon" outline color="primary">
-                        <Filter size={16}/>
-                    </Button>
-                    <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
-                        <Plus size={16}/>
-                    </Button>
-                </div>
-            </div>
-            <div>
-                <TableComponent
-                    progressPending={isLoading}
-                    data={payments}
-                    columns={basicColumns}
-                    size={payments.length}
-                    limit={limit}
-                    sortServer
-                    totalPages={pageCount}
-                    currentPage={currentPage}
-                    total_count={totalCount}
-                />
-            </div>
-            <CreatePayment toggleModal={toggleCreate} modal={createModal}/>
-            <FilterPayment handleFilter={handleFilter} open={filter}/>
+                    <CreatePayment toggleModal={toggleCreate} modal={createModal} storeId={active}/>
+                    <FilterPayment handleFilter={handleFilter} open={filter}/>
+                </TabPane>}
+            </TabContent>
         </div>
     )
 }
