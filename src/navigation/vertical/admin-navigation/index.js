@@ -1,9 +1,11 @@
 import React from 'react'
 import {Circle, Users} from 'react-feather'
-import {MdOutlineEditLocationAlt, MdProductionQuantityLimits} from "react-icons/md"
+import {MdOutlineConfirmationNumber, MdOutlineEditLocationAlt, MdProductionQuantityLimits} from "react-icons/md"
 import {BiStore} from "react-icons/bi"
 import {GiPayMoney} from "react-icons/gi"
 import {PiContactlessPaymentLight} from "react-icons/pi"
+import {GrCurrency} from "react-icons/gr"
+import {BsCurrencyDollar} from "react-icons/bs"
 
 const adminNavigation = [
     {
@@ -54,6 +56,12 @@ const adminNavigation = [
         title: "To'lovlar",
         icon: <PiContactlessPaymentLight size={20}/>,
         navLink: '/administrator/payments'
+    },
+    {
+        id: 'firms',
+        title: "Korxonalar",
+        icon: <MdOutlineConfirmationNumber size={20}/>,
+        navLink: '/administrator/firms'
     }
 ]
 

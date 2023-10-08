@@ -11,7 +11,7 @@ import {uploadFile} from "../../redux/reducers/file"
 import {unwrapResult} from "@reduxjs/toolkit"
 import * as Yup from "yup"
 import Button from "../../components/Btn"
-import {createProductFile} from "../../redux/reducers/product"
+import {createProductFile, getProducts} from "../../redux/reducers/product"
 
 export default function UploadProduct({
                                           toggleModal,
@@ -50,6 +50,9 @@ export default function UploadProduct({
                     }
                     dispatch(createProductFile(data)).then(unwrapResult).then(function () {
                         setFile(null)
+                        dispatch(getProducts({
+                            filter: JSON.stringify({storeId})
+                        }))
                         toast.success("Saqlandi")
                         toggleModal()
                     })

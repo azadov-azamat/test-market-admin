@@ -68,6 +68,19 @@ const Routes = [
         path: '/administrator/payments',
         component: lazy(() => import('../../views/payments')),
         exact: true
+    },
+    {
+        path: '/administrator/firms',
+        component: lazy(() => import('../../views/firms')),
+        exact: true
+    },
+    {
+        path: '/administrator/firm/:id',
+        component: lazy(() => import('../../views/firms/view')),
+        exact: true,
+        meta: {
+            navLink: '/administrator/firms'
+        }
     }
     // {
     //     path: '/administrator/payment/:id',

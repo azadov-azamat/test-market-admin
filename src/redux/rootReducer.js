@@ -8,6 +8,8 @@ import addresses from './reducers/address'
 import products from './reducers/product'
 import files from './reducers/file'
 import payments from './reducers/payment'
+import firms from './reducers/firms'
+import currencies from './reducers/currency'
 import sales from './reducers/sale'
 import debts from './reducers/debt'
 
@@ -21,6 +23,8 @@ const rootReducer = {
   stores,
   files,
   payments,
+  firms,
+  currencies,
   debts,
   sales
 }

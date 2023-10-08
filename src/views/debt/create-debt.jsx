@@ -5,7 +5,9 @@ import * as Yup from "yup"
 import {INPUT_MSG} from "../../utility/Utils"
 import React from "react"
 import Button from '../../components/Btn'
-import {setDebt} from "../../redux/reducers/debt"
+import {createDebt, setDebt} from "../../redux/reducers/debt"
+import {unwrapResult} from "@reduxjs/toolkit"
+import {toast} from "react-toastify"
 
 export default function CreateDebt({
                                        toggleModal,
@@ -38,7 +40,11 @@ export default function CreateDebt({
         enableReinitialize: true,
         validationSchema: ValidateSchema,
         onSubmit: (val) => {
-            console.log(val)
+            dispatch(createDebt(val)).then(unwrapResult)
+                .then(() => {
+                    toast.success("Saqlandi")
+                    toggleCancel()
+                })
         }
     })
 
