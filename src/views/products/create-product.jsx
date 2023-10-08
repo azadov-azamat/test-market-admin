@@ -32,8 +32,9 @@ export default function CreateProduct({
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
-        productPrice: Yup.string().required(INPUT_MSG),
-        productQuantity: Yup.string().required(INPUT_MSG),
+        productPrice: Yup.number().required(INPUT_MSG),
+        productQuantity: Yup.number().required(INPUT_MSG),
+        productMainPrice: Yup.number().required(INPUT_MSG),
         adressId: Yup.string().required(INPUT_MSG),
         productMeasure: Yup.string().required(INPUT_MSG)
     })
@@ -50,6 +51,7 @@ export default function CreateProduct({
             productName: product?.productName || '',
             productPrice: product?.productPrice || '',
             productQuantity: product?.productQuantity || '',
+            productMainPrice: product?.productMainPrice || '',
             storeId,
             adressId: product?.adressId || '',
             productMeasure: product?.productMeasure || ''
@@ -143,7 +145,7 @@ export default function CreateProduct({
                                     id={'productModel'}
                                     name={"productModel"}
                                     defaultValue={product?.productModel}
-                                    type={"textarea"}
+                                    type={"text"}
                                     onChange={formik.handleChange}
                                 />
                             </div>
@@ -155,7 +157,19 @@ export default function CreateProduct({
                                     id={'productPrice'}
                                     name={"productPrice"}
                                     defaultValue={product?.productPrice}
-                                    type={"text"}
+                                    type={"number"}
+                                    onChange={formik.handleChange}
+                                />
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className="mb-1">
+                                <Label for={"productMainPrice"}>Asosiy narxi *</Label>
+                                <Input
+                                    id={'productMainPrice'}
+                                    name={"productMainPrice"}
+                                    defaultValue={product?.productMainPrice}
+                                    type={"number"}
                                     onChange={formik.handleChange}
                                 />
                             </div>
@@ -167,7 +181,7 @@ export default function CreateProduct({
                                     id={'productQuantity'}
                                     name={"productQuantity"}
                                     defaultValue={product?.productQuantity}
-                                    type={"text"}
+                                    type={"number"}
                                     onChange={formik.handleChange}
                                 />
                             </div>
@@ -232,7 +246,7 @@ export default function CreateProduct({
                                     id={'productOption'}
                                     name={"productOption"}
                                     defaultValue={product?.productOption}
-                                    type={"text"}
+                                    type={"textarea"}
                                     onChange={formik.handleChange}
                                 />
                             </div>
