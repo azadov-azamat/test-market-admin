@@ -1,21 +1,20 @@
 import {useDispatch, useSelector} from "react-redux"
-import {useHistory, useLocation} from "react-router-dom"
+import {useLocation} from "react-router-dom"
 import React, {useEffect, useState} from "react"
 import qs from "qs"
 import {deleteDebt, getDebtsList, setDebt} from "../../redux/reducers/debt"
 import {unwrapResult} from "@reduxjs/toolkit"
 import {toast} from "react-toastify"
-import {Button, Card, CardBody, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane} from "reactstrap"
+import {Card, CardBody, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Edit, Plus, Trash} from "react-feather"
+import {Edit, Trash} from "react-feather"
 import DeleteModal from "../delete-modal"
 import CreateDebt from "./create-debt"
-import Product from "../products/product"
 
 export default function DebtComponent({clientId}) {
 
     const dispatch = useDispatch()
-    const history = useHistory()
+    // const history = useHistory()
     const location = useLocation()
 
     const {client} = useSelector(state => state.users)
@@ -51,21 +50,28 @@ export default function DebtComponent({clientId}) {
             })
     }
 
-    useEffect(() => {
-        if (client) {
-            history.push({
-                search: qs.stringify({
-                    filter: JSON.stringify({
-                        clientId: client?.id,
-                        storeId: active
-                    })
-                })
-            })
-        }
-    }, [client, active])
+    // useEffect(() => {
+    //     if (client && active) {
+    //         history.push({
+    //             search: qs.stringify({
+    //                 filter: JSON.stringify({
+    //                     clientId: client?.id,
+    //                     storeId: active
+    //                 })
+    //             })
+    //         })
+    //     }
+    // }, [client, active])
 
     useEffect(() => {
-        if (location.search) {
+        if (client || active) {
+            dispatch(getDebtsList({
+                filter: JSON.stringify({
+                    clientId: client?.id,
+                    storeId: active
+                })
+            }))
+        } else if (location.search) {
             dispatch(getDebtsList({...query}))
         } else {
             dispatch(getDebtsList({
@@ -84,7 +90,7 @@ export default function DebtComponent({clientId}) {
                 }
             })
         }
-    }, [location.search])
+    }, [location.search, client, active])
 
     useEffect(() => {
         let num = 0

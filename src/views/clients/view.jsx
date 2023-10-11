@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useLayoutEffect, useState} from 'react'
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux"
 import {getClientById} from "../../redux/reducers/user"
@@ -26,7 +26,7 @@ export default function ViewClient() {
         }
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         dispatch(getClientById(id))
     }, [id])
 

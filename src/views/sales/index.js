@@ -1,14 +1,14 @@
 import {useDispatch, useSelector} from "react-redux"
 import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useLayoutEffect, useState} from "react"
 import {deleteSale, getSales} from "../../redux/reducers/sale"
 import {Button, Card, CardBody, Col, Row} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
 import {BASE_URL} from "../../utility/Utils"
 import {HiQrCode} from "react-icons/hi2"
 import Select from "react-select"
-import {Edit, Filter, Plus, Trash} from "react-feather"
+import {Filter, Trash} from "react-feather"
 import FilterSales from "./Filter"
 import CustomPagination from "../custom-pagination"
 import DeleteModal from "../delete-modal"
@@ -40,8 +40,8 @@ export default function SaleComponent({clientId}) {
     const handleFilter = () => setFilter(!filter)
     const toggleDelete = () => setDelete(!isDelete)
     // const toggleCreate = () => setCreateModal(!createModal)
-
-    useEffect(() => {
+    console.log(clientId)
+    useLayoutEffect(() => {
         if (clientId !== undefined) {
             history.push({
                 search: qs.stringify({
@@ -65,14 +65,20 @@ export default function SaleComponent({clientId}) {
     }, [])
 
     useEffect(() => {
-        if (location.search) {
+        if (clientId) {
+            dispatch(getSales({
+                filter: JSON.stringify({
+                    clientId
+                })
+            }))
+        } else if (location.search) {
             dispatch(getSales({...query}))
         } else {
             // setTimeout(() => {
-                dispatch(getSales({limit: 10}))
+            dispatch(getSales({limit: 10}))
             // }, 1000)
         }
-    }, [location])
+    }, [location.pathname, clientId])
 
     useEffect(() => {
         return () => {

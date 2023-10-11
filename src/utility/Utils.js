@@ -17,6 +17,7 @@ export const http_auth = axios.create({
     baseURL: BASE_URL,
     headers: {
         Accept: "application/json",
+        "Access-Control-Allow-Origin" : "*",
         Authorization: getAuthorizationHeader()
     }
 })
@@ -24,7 +25,8 @@ export const http_auth = axios.create({
 export const http = axios.create({
     baseURL: BASE_URL,
     headers: {
-        Accept: "application/json"
+        Accept: "application/json",
+        "Access-Control-Allow-Origin" : "*"
     }
 })
 
