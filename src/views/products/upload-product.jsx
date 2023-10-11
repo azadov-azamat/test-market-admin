@@ -41,7 +41,6 @@ export default function UploadProduct({
                 const formD = new FormData()
                 formD.append("file", file)
                 dispatch(uploadFile(formD)).then(unwrapResult).then(res => {
-                    debugger
                     const data = {
                         addressId: val?.adressId,
                         body: {
