@@ -43,7 +43,7 @@ export default function Currencies({firmId}) {
             }
             setAmount(num)
         }
-    }, [])
+    }, [currencies])
 
     useEffect(() => {
         if (location.search) {
