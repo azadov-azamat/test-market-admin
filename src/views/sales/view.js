@@ -61,7 +61,7 @@ export default function ViewSales() {
                         <div
                             className="position-absolute top-0 d-flex justify-content-end w-100">
                             {/*<a href={`${BASE_URL}/sales/file/${sale?.id}`} className={'cursor-pointer'}>*/}
-                                <HiQrCode size={22} onClick={() => useDownload(sale?.id)}/>
+                                <HiQrCode size={22} onClick={() => useDownload(`sales/file/${sale?.id}`)}/>
                             {/*</a>*/}
                         </div>
                     </Card>

@@ -5,7 +5,6 @@ import React, {useEffect, useLayoutEffect, useState} from "react"
 import {deleteSale, getSales} from "../../redux/reducers/sale"
 import {Button, Card, CardBody, Col, Row} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
-import {BASE_URL} from "../../utility/Utils"
 import {HiQrCode} from "react-icons/hi2"
 import Select from "react-select"
 import {Filter, Trash} from "react-feather"
@@ -198,7 +197,7 @@ export default function SaleComponent({clientId}) {
                                 <div
                                     className="d-flex gap-1 align-items-center justify-content-end w-100 py-1 px-1">
                                     {/*<a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>*/}
-                                        <HiQrCode size={22} onClick={() => useDownload(item?.id)}/>
+                                    <HiQrCode size={22} onClick={() => useDownload(`sales/file/${item?.id}`)}/>
                                     {/*</a>*/}
                                     {/*<Edit size={20} className={"cursor-pointer text-warning"}/>*/}
                                     <Trash size={20} className={"cursor-pointer text-danger"} onClick={() => {

@@ -13,10 +13,10 @@ import CreateUser from "./create-user"
 import Select from "react-select"
 import FilterUser from "./Filter"
 import DateFormat from "../../components/DateFormat"
-import {BASE_URL} from "../../utility/Utils"
 import {MdOutlineSendToMobile} from "react-icons/md"
 import {unwrapResult} from "@reduxjs/toolkit"
 import {toast} from "react-toastify"
+import {useDownload} from "../../utility/hooks/useDownload"
 
 export default function Clients() {
 
@@ -180,12 +180,15 @@ export default function Clients() {
                             }}
                         />
                     </div>
-                    <div
-                        className="">
-                        <a href={`${BASE_URL}/clients/file`} className={'cursor-pointer'}>
-                            <Download size={25}/>
-                        </a>
-                    </div>
+                    {/*<div*/}
+                    {/*    className="">*/}
+                    {/*    <a href={`${BASE_URL}/clients/file`} className={'cursor-pointer'}>*/}
+                    {/*        <Download size={25}/>*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
+                    <Button onClick={() => useDownload(`clients/file`)} className="btn-icon" outline color="primary">
+                        <Download size={16}/>
+                    </Button>
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
                     </Button>

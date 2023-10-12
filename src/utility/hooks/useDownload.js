@@ -1,10 +1,10 @@
 import {BASE_URL, getAuthorizationHeader} from "../Utils"
 import axios from "axios"
 
-export const useDownload = (fileId) => {
+export const useDownload = (uri) => {
 
     axios({
-        url: `${BASE_URL}/sales/file/${fileId}`, //your url
+        url: `${BASE_URL}/${uri}`, //your url
         method: 'GET',
         responseType: 'blob', // important
         headers: {

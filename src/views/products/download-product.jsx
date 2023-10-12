@@ -1,10 +1,9 @@
-import {Col, Form, Label, Modal, ModalBody, ModalHeader, Row} from "reactstrap"
+import {Button, Col, Form, Label, Modal, ModalBody, ModalHeader, Row} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {useState} from "react"
 import Select from "react-select"
 import {getAddresses} from "../../redux/reducers/address"
-import {BASE_URL} from "../../utility/Utils"
-import {toast} from "react-toastify"
+import {useDownload} from "../../utility/hooks/useDownload"
 
 export default function DownloadProduct({
                                             toggleModal,
@@ -58,10 +57,12 @@ export default function DownloadProduct({
                     </Row>
                     <hr/>
                     <div className="w-100 d-flex justify-content-end">
-                        <a className={"disabled"} onClick={() => !addressId && toast.error("Manzilni tanlang")}
-                           href={addressId ? `${BASE_URL}/products/file/${addressId}` : "#"}>
-                            Yuklash
-                        </a>
+                        <Button disabled={!addressId} color={"primary"}
+                                onClick={() => useDownload(`products/file/${addressId}`)}>Yuklash</Button>
+                        {/*<a className={"disabled"} onClick={() => !addressId && toast.error("Manzilni tanlang")}*/}
+                        {/*   href={addressId ? `${BASE_URL}/products/file/${addressId}` : "#"}>*/}
+                        {/*    Yuklash*/}
+                        {/*</a>*/}
                     </div>
                 </Form>
             </ModalBody>
