@@ -71,14 +71,16 @@ export default function SaleComponent({clientId}) {
                     clientId
                 })
             }))
-        } else if (location.search) {
+        }
+
+        if (location.search) {
             dispatch(getSales({...query}))
         } else {
             // setTimeout(() => {
             dispatch(getSales({limit: 10}))
             // }, 1000)
         }
-    }, [location.pathname, clientId])
+    }, [location, clientId])
 
     useEffect(() => {
         return () => {

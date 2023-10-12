@@ -34,6 +34,7 @@ export default function CreateProduct({
         productName: Yup.string().required(INPUT_MSG),
         productPrice: Yup.number().required(INPUT_MSG),
         productQuantity: Yup.number().required(INPUT_MSG),
+        productModel: Yup.string().required(INPUT_MSG),
         productMainPrice: Yup.number().required(INPUT_MSG),
         adressId: Yup.string().required(INPUT_MSG),
         productMeasure: Yup.string().required(INPUT_MSG)
@@ -49,9 +50,10 @@ export default function CreateProduct({
     const formik = useFormik({
         initialValues: {
             productName: product?.productName || '',
-            productPrice: product?.productPrice || '',
-            productQuantity: product?.productQuantity || '',
-            productMainPrice: product?.productMainPrice || '',
+            productPrice: product?.productPrice || 0,
+            productQuantity: product?.productQuantity || 0,
+            productMainPrice: product?.productMainPrice || 0,
+            productModel: product?.productModel || '',
             storeId,
             adressId: product?.adressId || '',
             productMeasure: product?.productMeasure || ''
@@ -140,7 +142,7 @@ export default function CreateProduct({
                         </Col>
                         <Col>
                             <div className="mb-1">
-                                <Label for={"productModel"}>Modeli</Label>
+                                <Label for={"productModel"}>Modeli *</Label>
                                 <Input
                                     id={'productModel'}
                                     name={"productModel"}
@@ -254,7 +256,7 @@ export default function CreateProduct({
                     </Row>
                     <hr/>
                     <div className="w-100 d-flex justify-content-end">
-                        <Button disabled={!formik.isValid || !formik.dirty}
+                        <Button disabled={!formik.isValid || !formik.dirty }
                                 loading={isLoading}
                                 color={"primary"}
                                 type={'submit'}>{product ? "O'zgartirish" : "Saqlash"}</Button>

@@ -62,24 +62,25 @@ export default function Product({storeId}) {
     }
 
     const basicColumns = [
-        // {
-        //     width: '50px',
-        //     wrap: true,
-        //     cell: () => <>
-        //         <BsEye className={'text-success cursor-pointer'} size={20}/>
-        //     </>
-        // },
         {
             name: "Nomi",
-            width: '250px',
+            width: '200px',
             sortable: true,
             sortField: "productName",
             // wrap: true,
             selector: (row) => row.productName
         },
         {
+            name: "Asosiy narxi",
+            width: '150px',
+            sortable: true,
+            sortField: "productMainPrice",
+            wrap: true,
+            selector: (row) => `${row.productMainPrice} sum`
+        },
+        {
             name: "Narxi",
-            width: '100px',
+            width: '150px',
             sortable: true,
             sortField: "productPrice",
             wrap: true,
