@@ -17,9 +17,9 @@ export const http_auth = axios.create({
     baseURL: BASE_URL,
     headers: {
         Accept: "application/json",
-        AccessControlAllowOrigin: "*",
-        AccessControlAllowCredentials: true,
-        AccessControlAllowMethods: 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Methods": 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
         Authorization: getAuthorizationHeader()
     }
 })
