@@ -27,6 +27,8 @@ const FilterPayment = ({
                     })
                 }
             }
+            delete val?.date_apply_from
+            delete val?.date_apply_to
             history.push({
                 search: qs.stringify({
                     ...query,
