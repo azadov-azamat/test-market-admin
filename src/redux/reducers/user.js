@@ -88,6 +88,15 @@ export const patchClient = createAsyncThunk('app/patchClient', async (data, {rej
     }
 })
 
+export const sendSmsClients = createAsyncThunk('app/sendSmsClients', async (data, {rejectWithValue}) => {
+    try {
+        const response = await http_auth.post(`/clients/sms`, data)
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
 
 export const userSlice = createSlice({
     name: 'user',

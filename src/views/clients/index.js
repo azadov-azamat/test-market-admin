@@ -7,13 +7,16 @@ import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {BsEye} from "react-icons/bs"
 import {useHistory, useLocation} from "react-router-dom"
-import {deleteClient, getClients, setClient} from "../../redux/reducers/user"
+import {deleteClient, getClients, sendSmsClients, setClient} from "../../redux/reducers/user"
 import qs from "qs"
 import CreateUser from "./create-user"
 import Select from "react-select"
 import FilterUser from "./Filter"
 import DateFormat from "../../components/DateFormat"
 import {BASE_URL} from "../../utility/Utils"
+import {MdOutlineSendToMobile} from "react-icons/md"
+import {unwrapResult} from "@reduxjs/toolkit"
+import {toast} from "react-toastify"
 
 export default function Clients() {
 
@@ -31,6 +34,8 @@ export default function Clients() {
 
     const [createModal, setCreateModal] = useState(false)
     const [filter, setFilter] = useState(false)
+    const [idData, setIdData] = useState([])
+
     const handleFilter = () => setFilter(!filter)
     const toggleCreate = () => setCreateModal(!createModal)
 
@@ -118,6 +123,28 @@ export default function Clients() {
         }
     ]
 
+    const handleChange = (selectedRows) => {
+        console.log(selectedRows)
+        const data = []
+        for (const selectedRow of selectedRows?.selectedRows) {
+            data.push(selectedRow?.id)
+        }
+        setIdData(data)
+        // setSelectColumn(selectedRows?.selectedRows)
+    }
+
+    function handleSend() {
+        if (idData.length !== 0) {
+            dispatch(sendSmsClients(idData)).then(unwrapResult)
+                .then(() => {
+                    toast.success("Mijozlarga sms jo'natildi")
+                })
+                .catch(() => {
+                    toast.error("Jo'natishda xatolik, Iltimos qayta urinib ko'ring")
+                })
+        }
+    }
+
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
@@ -162,6 +189,10 @@ export default function Clients() {
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
                     </Button>
+                    <Button onClick={handleSend} disabled={idData.length === 0} className="btn-icon" outline
+                            color="primary">
+                        <MdOutlineSendToMobile size={20}/>
+                    </Button>
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
@@ -177,6 +208,8 @@ export default function Clients() {
                     sortServer
                     totalPages={pageCount}
                     currentPage={currentPage}
+                    selectableRows
+                    onSelectedRowsChange={handleChange}
                     total_count={totalCount}
                 />
             </div>
