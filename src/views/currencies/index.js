@@ -5,18 +5,17 @@ import {Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
-import {useHistory, useLocation} from "react-router-dom"
+import {useLocation} from "react-router-dom"
 import qs from "qs"
 import CreateCurrency from "./create-currency"
-import Select from "react-select"
 import FilterPayment from "./Filter"
 import {deleteCurrency, getCurrencies, setCurrency} from "../../redux/reducers/currency"
 
 export default function Currencies({firmId}) {
 
     const dispatch = useDispatch()
-    const history = useHistory()
-    const location = useLocation()
+    // const history = useHistory()
+    const location   = useLocation()
     const {
         currencies,
         currentPage,
@@ -34,10 +33,24 @@ export default function Currencies({firmId}) {
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
-    useEffect(() => {
+    const [amount, setAmount] = useState(0)
 
+    useEffect(() => {
+        if (currencies) {
+            let num = 0
+            for (let i = 0; i < currencies.length; i++) {
+                num += currencies[i].currencyMoney
+            }
+            setAmount(num)
+        }
+    }, [])
+
+    useEffect(() => {
         if (location.search) {
-            dispatch(getCurrencies({...query, filter: JSON.stringify({firmId})}))
+            dispatch(getCurrencies({
+                ...query,
+                filter: JSON.stringify({firmId})
+            }))
         } else {
             dispatch(getCurrencies({filter: JSON.stringify({firmId})}))
         }
@@ -105,38 +118,38 @@ export default function Currencies({firmId}) {
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
-                <h4>Ma'lumotlar</h4>
+                <h4>Ma'lumotlar: {amount} sum</h4>
                 <div className="d-flex gap-1">
-                    <div className="">
-                        <Select
-                            id="limit"
-                            name="limit"
-                            options={[
-                                {value: 10},
-                                {value: 15},
-                                {value: 20},
-                                {value: 25}
-                            ]}
-                            defaultValue={{
-                                label: limit,
-                                value: limit
-                            }}
-                            getOptionLabel={option => option.value}
-                            getOptionValue={option => option.value}
-                            onChange={(val) => {
-                                const data = {
-                                   limit: query?.limit || 0,
-                                   ...query
-                               }
-                                data.limit = val.value
-                                history.push({
-                                    search: qs.stringify({
-                                        ...data
-                                    })
-                                })
-                            }}
-                        />
-                    </div>
+                    {/*<div className="">*/}
+                    {/*    <Select*/}
+                    {/*        id="limit"*/}
+                    {/*        name="limit"*/}
+                    {/*        options={[*/}
+                    {/*            {value: 10},*/}
+                    {/*            {value: 15},*/}
+                    {/*            {value: 20},*/}
+                    {/*            {value: 25}*/}
+                    {/*        ]}*/}
+                    {/*        defaultValue={{*/}
+                    {/*            label: limit,*/}
+                    {/*            value: limit*/}
+                    {/*        }}*/}
+                    {/*        getOptionLabel={option => option.value}*/}
+                    {/*        getOptionValue={option => option.value}*/}
+                    {/*        onChange={(val) => {*/}
+                    {/*            const data = {*/}
+                    {/*               limit: query?.limit || 0,*/}
+                    {/*               ...query*/}
+                    {/*           }*/}
+                    {/*            data.limit = val.value*/}
+                    {/*            history.push({*/}
+                    {/*                search: qs.stringify({*/}
+                    {/*                    ...data*/}
+                    {/*                })*/}
+                    {/*            })*/}
+                    {/*        }}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
                     </Button>

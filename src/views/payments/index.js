@@ -38,6 +38,7 @@ export default function Payments() {
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
 
     const [active, setActive] = useState(null)
+    const [amount, setAmount] = useState(0)
 
     const toggle = tab => {
         if (active !== tab) {
@@ -56,6 +57,16 @@ export default function Payments() {
             })
         }
     }, [active])
+
+    useEffect(() => {
+        if (payments) {
+            let num = 0
+            for (let i = 0; i < payments.length; i++) {
+                num += payments[i].paymentAmount
+            }
+            setAmount(num)
+        }
+    }, [payments])
 
     useEffect(() => {
         if (location.search) {
@@ -157,38 +168,38 @@ export default function Payments() {
             <TabContent className="py-50" activeTab={active}>
                 {active !== null && <TabPane tabId={active}>
                     <div className="d-flex align-items-center justify-content-between">
-                        <h4>Ma'lumotlar</h4>
+                        <h4>Ma'lumotlar: {amount} sum</h4>
                         <div className="d-flex gap-1">
-                            <div className="">
-                                <Select
-                                    id="limit"
-                                    name="limit"
-                                    options={[
-                                        {value: 10},
-                                        {value: 15},
-                                        {value: 20},
-                                        {value: 25}
-                                    ]}
-                                    defaultValue={{
-                                        label: limit,
-                                        value: limit
-                                    }}
-                                    getOptionLabel={option => option.value}
-                                    getOptionValue={option => option.value}
-                                    onChange={(val) => {
-                                        const data = {
-                                            limit: query?.limit || 0,
-                                            ...query
-                                        }
-                                        data.limit = val.value
-                                        history.push({
-                                            search: qs.stringify({
-                                                ...data
-                                            })
-                                        })
-                                    }}
-                                />
-                            </div>
+                            {/*<div className="">*/}
+                            {/*    <Select*/}
+                            {/*        id="limit"*/}
+                            {/*        name="limit"*/}
+                            {/*        options={[*/}
+                            {/*            {value: 10},*/}
+                            {/*            {value: 15},*/}
+                            {/*            {value: 20},*/}
+                            {/*            {value: 25}*/}
+                            {/*        ]}*/}
+                            {/*        defaultValue={{*/}
+                            {/*            label: limit,*/}
+                            {/*            value: limit*/}
+                            {/*        }}*/}
+                            {/*        getOptionLabel={option => option.value}*/}
+                            {/*        getOptionValue={option => option.value}*/}
+                            {/*        onChange={(val) => {*/}
+                            {/*            const data = {*/}
+                            {/*                limit: query?.limit || 0,*/}
+                            {/*                ...query*/}
+                            {/*            }*/}
+                            {/*            data.limit = val.value*/}
+                            {/*            history.push({*/}
+                            {/*                search: qs.stringify({*/}
+                            {/*                    ...data*/}
+                            {/*                })*/}
+                            {/*            })*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                             <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                                 <Filter size={16}/>
                             </Button>
