@@ -8,6 +8,7 @@ import {BASE_URL, handleSwitchPayType} from "../../utility/Utils"
 import {HiQrCode} from "react-icons/hi2"
 import {FiExternalLink} from "react-icons/fi"
 import DateFormat from "../../components/DateFormat"
+import {useDownload} from "../../utility/hooks/useDownload"
 
 export default function ViewSales() {
 
@@ -59,9 +60,9 @@ export default function ViewSales() {
                         </CardBody>
                         <div
                             className="position-absolute top-0 d-flex justify-content-end w-100">
-                            <a href={`${BASE_URL}/sales/file/${sale?.id}`} className={'cursor-pointer'}>
-                                <HiQrCode size={25}/>
-                            </a>
+                            {/*<a href={`${BASE_URL}/sales/file/${sale?.id}`} className={'cursor-pointer'}>*/}
+                                <HiQrCode size={22} onClick={() => useDownload(sale?.id)}/>
+                            {/*</a>*/}
                         </div>
                     </Card>
                 </Col>

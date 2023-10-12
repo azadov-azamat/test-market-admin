@@ -15,6 +15,7 @@ import DeleteModal from "../delete-modal"
 import {toast} from "react-toastify"
 import {unwrapResult} from "@reduxjs/toolkit"
 import {getStores} from "../../redux/reducers/store"
+import {useDownload} from "../../utility/hooks/useDownload"
 
 export default function SaleComponent({clientId}) {
 
@@ -196,9 +197,9 @@ export default function SaleComponent({clientId}) {
                                 </CardBody>
                                 <div
                                     className="d-flex gap-1 align-items-center justify-content-end w-100 py-1 px-1">
-                                    <a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>
-                                        <HiQrCode size={22}/>
-                                    </a>
+                                    {/*<a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>*/}
+                                        <HiQrCode size={22} onClick={() => useDownload(item?.id)}/>
+                                    {/*</a>*/}
                                     {/*<Edit size={20} className={"cursor-pointer text-warning"}/>*/}
                                     <Trash size={20} className={"cursor-pointer text-danger"} onClick={() => {
                                         setId(item?.id)
