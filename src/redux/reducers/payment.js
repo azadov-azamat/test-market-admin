@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {http_auth} from "../../utility/Utils"
+import {http_auth, http_nbu} from "../../utility/Utils"
 import {toast} from "react-toastify"
 
 
@@ -50,12 +50,22 @@ export const patchPayment = createAsyncThunk('payment/patchPayment', async (data
     }
 })
 
+export const getCurrencyNbu = createAsyncThunk('payment/getCurrencyNbu', async (_, {rejectWithValue}) => {
+    try {
+        const response = await http_nbu.get('/arkhiv-kursov-valyut/json/')
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
 
 export const paymentsSlice = createSlice({
     name: 'payments',
     initialState: {
         payments: [],
         payment: null,
+        currencies: [],
         currentPage: 0,
         pageCount: 0,
        limit: 10,
@@ -129,6 +139,10 @@ export const paymentsSlice = createSlice({
         [patchPayment.rejected]: (state, action) => {
             toast.error(action.payload)
             state.isLoading = false
+        },
+
+        [getCurrencyNbu.fulfilled]: (state, action) => {
+            state.currencies = action.payload
         }
     }
 })

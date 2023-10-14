@@ -53,6 +53,7 @@ export default function CreateProduct({
             productPrice: product?.productPrice || 0,
             productQuantity: product?.productQuantity || 0,
             productMainPrice: product?.productMainPrice || 0,
+            productCurrency: product?.productCurrency || "dollar",
             productModel: product?.productModel || '',
             storeId,
             adressId: product?.adressId || '',
@@ -152,6 +153,45 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
+                        <div className="d-flex align-items-center gap-1">
+                        <Col className="col-3">
+                            <div className="mb-1">
+                                <Label className="form-label" for="productCurrency">
+                                    Valyuta *
+                                </Label>
+                                <Select
+                                    id="productCurrency"
+                                    name="productCurrency"
+                                    placeholder="Tanlang..."
+                                    options={[
+                                        {value: "dollar"},
+                                        {value: "sum"}
+                                    ]}
+                                    defaultValue={{
+                                        label: product?.productCurrency || "dollar",
+                                        value: product?.productCurrency || "dollar"
+                                    }}
+                                    getOptionLabel={option => option.value}
+                                    getOptionValue={option => option.value}
+                                    onChange={(val) => {
+                                        formik.setFieldValue("productCurrency", val.value)
+                                    }}
+                                />
+                            </div>
+                        </Col>
+                        <Col className="col-8">
+                            <div className="mb-1">
+                                <Label for={"productMainPrice"}>Asosiy narxi *</Label>
+                                <Input
+                                    id={'productMainPrice'}
+                                    name={"productMainPrice"}
+                                    defaultValue={product?.productMainPrice}
+                                    type={"number"}
+                                    onChange={formik.handleChange}
+                                />
+                            </div>
+                        </Col>
+                        </div>
                         <Col>
                             <div className="mb-1">
                                 <Label for={"productPrice"}>Narxi *</Label>
@@ -164,18 +204,7 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
-                        <Col>
-                            <div className="mb-1">
-                                <Label for={"productMainPrice"}>Asosiy narxi *</Label>
-                                <Input
-                                    id={'productMainPrice'}
-                                    name={"productMainPrice"}
-                                    defaultValue={product?.productMainPrice}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
-                                />
-                            </div>
-                        </Col>
+                    
                         <Col>
                             <div className="mb-1">
                                 <Label for={"productQuantity"}>Miqdori *</Label>
