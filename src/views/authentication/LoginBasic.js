@@ -35,7 +35,7 @@ const LoginBasic = () => {
 
     useEffect(() => {
         if (token !== '') {
-
+            history.push('/administrator/users')
         }
     }, [userData])
 

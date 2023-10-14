@@ -42,6 +42,7 @@ export default function Product({storeId}) {
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
+    const dollarCur = parseInt(currencies?.find(item => item.Ccy === "USD")?.Rate)
 
     useEffect(() => {
         if (location.search) {
@@ -80,19 +81,19 @@ export default function Product({storeId}) {
         },
         {
             name: "Asosiy narxi",
-            width: '150px',
+            width: '250px',
             sortable: true,
             sortField: "productMainPrice",
             wrap: true,
-            selector: (row) => `${row.productMainPrice} sum`
+            selector: (row) => `${row?.productMainPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${row?.productMainPrice * dollarCur} sum`) : ""}`
         },
         {
             name: "Narxi",
-            width: '150px',
+            width: '250px',
             sortable: true,
             sortField: "productPrice",
             wrap: true,
-            selector: (row) => `${row.productPrice} sum`
+            selector: (row) => `${row?.productPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${row?.productPrice * dollarCur} sum`) : ""}`
         },
         {
             name: "Miqdori",
@@ -194,6 +195,9 @@ export default function Product({storeId}) {
                         <Download size={16}/>
                     </Button>
                 </div>
+            </div>
+            <div className='d-flex justify-content-center w-100 text-center mt-2'>
+            <p>Valyuta kursi NBU bankining {currencies?.find(item => item.Ccy === "USD")?.Date} ma'lumotiga ko'ra: {dollarCur} Sum</p>
             </div>
             <div>
                 <TableComponent
