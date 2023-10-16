@@ -29,6 +29,11 @@ export default function CreateProduct({
 
     const [file, setFile] = useState(null)
     const [editImg, setEditImg] = useState(false)
+    // const [inputs, setInputs] = useState({
+    //     productQuantity: product?.productQuantity || '',
+    //     productMainPrice: product?.productMainPrice || '',
+    //     productPrice: product?.productPrice || ''
+    // })
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
@@ -46,6 +51,14 @@ export default function CreateProduct({
         dispatch(setProduct(null))
         toggleModal()
     }
+
+    // useEffect(() => { 
+    //     if (product) {
+    //         inputs.productPrice = product?.productPrice
+    //         inputs.productMainPrice = product?.productMainPrice
+    //         inputs.productQuantity = product?.productQuantity
+    //     }
+    // }, [product])
 
     const formik = useFormik({
         initialValues: {
@@ -106,6 +119,13 @@ export default function CreateProduct({
             }
         }
     })
+
+    // const toggleInputs = (e) => {
+    //     const {name, value} = e.target
+    //     inputs[name] = value.replace(/[^0-9.]/g, '')
+    //     setInputs({...inputs})
+    //     formik.setFieldValue(name, value)
+    // }
 
     return (
         <Modal
@@ -185,9 +205,13 @@ export default function CreateProduct({
                                 <Input
                                     id={'productMainPrice'}
                                     name={"productMainPrice"}
+                                    // value={inputs.productMainPrice}
                                     defaultValue={product?.productMainPrice}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
                                 />
                             </div>
                         </Col>
@@ -198,9 +222,13 @@ export default function CreateProduct({
                                 <Input
                                     id={'productPrice'}
                                     name={"productPrice"}
+                                    // value={inputs.productPrice}
                                     defaultValue={product?.productPrice}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
                                 />
                             </div>
                         </Col>
@@ -211,9 +239,13 @@ export default function CreateProduct({
                                 <Input
                                     id={'productQuantity'}
                                     name={"productQuantity"}
+                                    // value={inputs.productQuantity}
                                     defaultValue={product?.productQuantity}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
                                 />
                             </div>
                         </Col>

@@ -85,7 +85,7 @@ export default function Product({storeId}) {
             sortable: true,
             sortField: "productMainPrice",
             wrap: true,
-            selector: (row) => `${row?.productMainPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${row?.productMainPrice * dollarCur} sum`) : ""}`
+            selector: (row) => `${row?.productMainPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${Math.round(row?.productMainPrice * dollarCur)} sum`) : ""}`
         },
         {
             name: "Narxi",
@@ -93,7 +93,7 @@ export default function Product({storeId}) {
             sortable: true,
             sortField: "productPrice",
             wrap: true,
-            selector: (row) => `${row?.productPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${row?.productPrice * dollarCur} sum`) : ""}`
+            selector: (row) => `${row?.productPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${Math.round(row?.productPrice * dollarCur)} sum`) : ""}`
         },
         {
             name: "Miqdori",

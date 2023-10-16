@@ -34,7 +34,7 @@ export default function Client({storeId}) {
 
     const [createModal, setCreateModal] = useState(false)
     const [filter, setFilter] = useState(false)
-    const [idData, setIdData] = useState([])
+    // const [idData, setIdData] = useState([])
 
     const handleFilter = () => setFilter(!filter)
     const toggleCreate = () => setCreateModal(!createModal)
@@ -131,26 +131,25 @@ console.log(clients)
         }
     ]
 
-    const handleChange = (selectedRows) => {
-        console.log(selectedRows)
-        const data = []
-        for (const selectedRow of selectedRows?.selectedRows) {
-            data.push(selectedRow?.id)
-        }
-        setIdData(data)
-        // setSelectColumn(selectedRows?.selectedRows)
-    }
+    // const handleChange = (selectedRows) => {
+    //     const data = []
+    //     for (const selectedRow of selectedRows?.selectedRows) {
+    //         data.push(selectedRow?.id)
+    //     }
+    //     setIdData(data)
+    //     // setSelectColumn(selectedRows?.selectedRows)
+    // }
 
     function handleSend() {
-        if (idData.length !== 0) {
-            dispatch(sendSmsClients({data: idData, storeId})).then(unwrapResult)
+        // if (idData.length !== 0) {
+            dispatch(sendSmsClients({storeId})).then(unwrapResult)
                 .then(() => {
                     toast.success("Mijozlarga sms jo'natildi")
                 })
                 .catch(() => {
                     toast.error("Jo'natishda xatolik, Iltimos qayta urinib ko'ring")
                 })
-        }
+        // }
     }
 
     return (
@@ -194,7 +193,7 @@ console.log(clients)
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
                     </Button>
-                    <Button onClick={handleSend} disabled={idData.length === 0} className="btn-icon" outline
+                    <Button onClick={handleSend} className="btn-icon" outline
                             color="primary">
                         <MdOutlineSendToMobile size={20}/>
                     </Button>
@@ -213,8 +212,8 @@ console.log(clients)
                     sortServer
                     totalPages={pageCount}
                     currentPage={currentPage}
-                    selectableRows
-                    onSelectedRowsChange={handleChange}
+                    // selectableRows
+                    // onSelectedRowsChange={handleChange}
                     total_count={totalCount}
                 />
             </div>
