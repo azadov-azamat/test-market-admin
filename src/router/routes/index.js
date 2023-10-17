@@ -44,7 +44,7 @@ const Routes = [
         exact: true
     },
     {
-        path: '/administrator/client/:id',
+        path: '/administrator/client/:id/:storeId',
         component: lazy(() => import('../../views/clients/view')),
         exact: true,
         meta: {

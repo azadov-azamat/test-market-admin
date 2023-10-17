@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux"
 import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
-import React, {useEffect, useLayoutEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import {deleteSale, getSales} from "../../redux/reducers/sale"
 import {Button, Card, CardBody, Col, Row} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
@@ -16,7 +16,7 @@ import {unwrapResult} from "@reduxjs/toolkit"
 import {getStores} from "../../redux/reducers/store"
 import {useDownload} from "../../utility/hooks/useDownload"
 
-export default function SaleComponent({clientId}) {
+export default function SaleComponent({clientId, storeId}) {
 
     const dispatch = useDispatch()
     const history = useHistory()
@@ -39,19 +39,19 @@ export default function SaleComponent({clientId}) {
     const [filter, setFilter] = useState(false)
     const handleFilter = () => setFilter(!filter)
     const toggleDelete = () => setDelete(!isDelete)
-    // const toggleCreate = () => setCreateModal(!createModal)
-    console.log(clientId)
-    useLayoutEffect(() => {
-        if (clientId !== undefined) {
-            history.push({
-                search: qs.stringify({
-                    filter: JSON.stringify({
-                        clientId
-                    })
-                })
-            })
-        }
-    }, [clientId])
+  
+    // useEffect(() => {
+    //     if (clientId) {
+    //         history.push({
+    //             search: qs.stringify({
+    //                 filter: JSON.stringify({
+    //                     clientId,
+    //                     storeId
+    //                 })
+    //             })
+    //         })
+    //     }
+    // }, [clientId, storeId])
 
     useEffect(() => {
         dispatch(getStores())
@@ -65,22 +65,36 @@ export default function SaleComponent({clientId}) {
     }, [])
 
     useEffect(() => {
-        if (clientId) {
-            dispatch(getSales({
-                filter: JSON.stringify({
-                    clientId
-                })
-            }))
+        if (clientId || storeId) {
+            if (location.search) {
+                dispatch(getSales({
+                    ...query,
+                    filter: JSON.stringify({
+                        clientId,
+                        storeId
+                    })
+                }))
+            } else {
+                // setTimeout(() => {
+                dispatch(getSales({
+                    limit: 10,
+                    filter: JSON.stringify({
+                        clientId,
+                        storeId
+                    })
+                }))
+                // }, 1000)
+            }
+        } else  {
+            if (location.search) {
+                dispatch(getSales({...query}))
+            } else {
+                // setTimeout(() => {
+                dispatch(getSales({limit: 10}))
+                // }, 1000)
+            }
         }
-
-        if (location.search) {
-            dispatch(getSales({...query}))
-        } else {
-            // setTimeout(() => {
-            dispatch(getSales({limit: 10}))
-            // }, 1000)
-        }
-    }, [location, clientId])
+    }, [location, clientId, storeId])
 
     useEffect(() => {
         return () => {

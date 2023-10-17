@@ -11,7 +11,7 @@ import {Edit, Trash} from "react-feather"
 import DeleteModal from "../delete-modal"
 import CreateDebt from "./create-debt"
 
-export default function DebtComponent({clientId}) {
+export default function DebtComponent({clientId, storeId}) {
 
     const dispatch = useDispatch()
     // const history = useHistory()
@@ -31,14 +31,6 @@ export default function DebtComponent({clientId}) {
     const toggleDelete = () => setDelete(!isDelete)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
-
-    const [active, setActive] = useState(null)
-
-    const toggle = tab => {
-        if (active !== tab) {
-            setActive(tab)
-        }
-    }
 
     const removeById = () => {
         dispatch(deleteDebt(removeId)).then(unwrapResult)
@@ -64,11 +56,11 @@ export default function DebtComponent({clientId}) {
     // }, [client, active])
 
     useEffect(() => {
-        if (client || active) {
+        if (client || storeId) {
             dispatch(getDebtsList({
                 filter: JSON.stringify({
                     clientId: client?.id,
-                    storeId: active
+                    storeId
                 })
             }))
         } else if (location.search) {
@@ -77,7 +69,7 @@ export default function DebtComponent({clientId}) {
             dispatch(getDebtsList({
                 filter: JSON.stringify({
                     clientId: client?.id,
-                    storeId: active
+                    storeId
                 })
             }))
         }
@@ -90,7 +82,7 @@ export default function DebtComponent({clientId}) {
                 }
             })
         }
-    }, [location.search, client, active])
+    }, [location.search, client, storeId])
 
     useEffect(() => {
         let num = 0
@@ -102,34 +94,6 @@ export default function DebtComponent({clientId}) {
 
     return (
         <div>
-            <Card>
-                <CardBody>
-                    <Nav className="justify-content-center" tabs>
-                        {
-                            stores.map(({
-                                            storeName,
-                                            id
-                                        }, ind) => {
-                                    return (
-                                        <NavItem key={ind}>
-                                            <NavLink
-                                                active={active === id}
-                                                onClick={() => {
-                                                    toggle(id)
-                                                }}
-                                            >
-                                                {storeName}
-                                            </NavLink>
-                                        </NavItem>
-                                    )
-                                }
-                            )
-                        }
-                    </Nav>
-                </CardBody>
-            </Card>
-            <TabContent className="py-50" activeTab={active}>
-                {active !== null && <TabPane tabId={active}>
                     <Row sm={2} md={3} xl={4} className={"row-cols-1"}>
                         {debts?.map((item, ind) => {
                             return (
@@ -167,9 +131,6 @@ export default function DebtComponent({clientId}) {
                             )
                         })}
                     </Row>
-                </TabPane>}
-            </TabContent>
-
             <Row>
                 <Col className={"col-12"}>
                     <Card>

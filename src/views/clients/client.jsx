@@ -48,7 +48,7 @@ export default function Client({storeId}) {
             dispatch(getClientsByStoreId({storeId}))
         }
     }, [location.search, storeId])
-console.log(clients)
+
     function editUser(currentUser) {
         dispatch(setClient(currentUser))
         toggleCreate()
@@ -60,7 +60,7 @@ console.log(clients)
             wrap: true,
             cell: (row) => <>
                 <BsEye className={'text-success cursor-pointer'} size={20}
-                       onClick={() => history.push(`/administrator/client/${row.id}`)}/>
+                       onClick={() => history.push(`/administrator/client/${row.id}/${storeId}`)}/>
             </>
         },
         {

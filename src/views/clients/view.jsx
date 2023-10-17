@@ -11,7 +11,7 @@ import DebtComponent from "../debt"
 
 export default function ViewClient() {
 
-    const {id} = useParams()
+    const {id, storeId} = useParams()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -97,10 +97,10 @@ export default function ViewClient() {
             </Card>
             <TabContent className="py-50" activeTab={active}>
                 <TabPane tabId={"1"}>
-                    <SaleComponent clientId={id}/>
+                    <SaleComponent clientId={id} storeId={storeId}/>
                 </TabPane>
                 <TabPane tabId={"2"}>
-                    <DebtComponent clientId={id}/>
+                    <DebtComponent clientId={id} storeId={storeId}/>
                 </TabPane>
                 <TabPane tabId={"3"}>
                     <PaymentComponent/>
