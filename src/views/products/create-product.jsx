@@ -54,6 +54,7 @@ export default function CreateProduct({
             productQuantity: product?.productQuantity || 0,
             productMainPrice: product?.productMainPrice || 0,
             productModel: product?.productModel || '',
+            productCurrency: product?.productCurrency || 'sum',
             storeId,
             adressId: product?.adressId || '',
             productMeasure: product?.productMeasure || ''
@@ -152,6 +153,45 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
+                        <div className="d-flex justify-content-between">
+                            <Col className={"col-3"}>
+                                <div className="mb-1">
+                                    <Label className="form-label" for="productCurrency">
+                                        Valyuta *
+                                    </Label>
+                                    <Select
+                                        id="productCurrency"
+                                        name="productCurrency"
+                                        placeholder="Tanlang..."
+                                        options={[
+                                            {value: "dollar"},
+                                            {value: "sum"}
+                                        ]}
+                                        defaultValue={{
+                                            label: product?.productCurrency || "dollar",
+                                            value: product?.productCurrency || "dollar"
+                                        }}
+                                        getOptionLabel={option => option.value}
+                                        getOptionValue={option => option.value}
+                                        onChange={(val) => {
+                                            formik.setFieldValue("productCurrency", val.value)
+                                        }}
+                                    />
+                                </div>
+                            </Col>
+                            <Col className={"col-8"}>
+                                <div className="mb-1">
+                                    <Label for={"productMainPrice"}>Asosiy narxi *</Label>
+                                    <Input
+                                        id={'productMainPrice'}
+                                        name={"productMainPrice"}
+                                        defaultValue={product?.productMainPrice}
+                                        type={"number"}
+                                        onChange={formik.handleChange}
+                                    />
+                                </div>
+                            </Col>
+                        </div>
                         <Col>
                             <div className="mb-1">
                                 <Label for={"productPrice"}>Narxi *</Label>
@@ -159,18 +199,6 @@ export default function CreateProduct({
                                     id={'productPrice'}
                                     name={"productPrice"}
                                     defaultValue={product?.productPrice}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
-                                />
-                            </div>
-                        </Col>
-                        <Col>
-                            <div className="mb-1">
-                                <Label for={"productMainPrice"}>Asosiy narxi *</Label>
-                                <Input
-                                    id={'productMainPrice'}
-                                    name={"productMainPrice"}
-                                    defaultValue={product?.productMainPrice}
                                     type={"number"}
                                     onChange={formik.handleChange}
                                 />

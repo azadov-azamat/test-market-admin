@@ -14,6 +14,7 @@ import Select from "react-select"
 import FilterProduct from "./Filter"
 import DownloadProduct from "./download-product"
 import UploadProduct from "./upload-product"
+import {getCurrencyUnb} from "../../redux/reducers/payment"
 
 export default function Product({storeId}) {
 
@@ -28,6 +29,7 @@ export default function Product({storeId}) {
         totalCount,
         isLoading
     } = useSelector(state => state.products)
+    const {currencies} = useSelector(state => state.payments)
     const {addresses} = useSelector(state => state.addresses)
 
     const [createModal, setCreateModal] = useState(false)
@@ -43,7 +45,10 @@ export default function Product({storeId}) {
 
     useEffect(() => {
         if (location.search) {
-            dispatch(getProducts({...query,  filter: {storeId}}))
+            dispatch(getProducts({
+                ...query,
+                filter: {storeId}
+            }))
         } else {
             dispatch(getProducts({
                 limit: 10,
@@ -56,11 +61,15 @@ export default function Product({storeId}) {
         dispatch(getAddresses())
     }, [])
 
+    useEffect(() => {
+        dispatch(getCurrencyUnb())
+    }, [])
+
     function editProduct(currentProduct) {
         dispatch(setProduct(currentProduct))
         toggleCreate()
     }
-
+    
     const basicColumns = [
         {
             name: "Nomi",
@@ -72,19 +81,19 @@ export default function Product({storeId}) {
         },
         {
             name: "Asosiy narxi",
-            width: '150px',
+            width: '250px',
             sortable: true,
             sortField: "productMainPrice",
             wrap: true,
-            selector: (row) => `${row.productMainPrice} sum`
+            selector: (row) => `${row.productMainPrice} ${row.productCurrency} ${row.productCurrency === 'dollar' ? (` - ${parseInt(currencies.find(item => item.Ccy === "USD").Rate * row.productMainPrice)}`) : ''}`
         },
         {
             name: "Narxi",
-            width: '150px',
+            width: '250px',
             sortable: true,
             sortField: "productPrice",
             wrap: true,
-            selector: (row) => `${row.productPrice} sum`
+            selector: (row) => `${row.productPrice} ${row.productCurrency} ${row.productCurrency === 'dollar' ? (` - ${parseInt(currencies.find(item => item.Ccy === "USD").Rate * row.productPrice)}`) : ''}`
         },
         {
             name: "Miqdori",
@@ -141,7 +150,12 @@ export default function Product({storeId}) {
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
-                <h4>Ma'lumotlar</h4>
+                <div class="d-flex align-items-center gap-1">
+                    <h4>Ma'lumotlar</h4>
+                    <span>
+                        Valyuta - {currencies.find(item => item.Ccy === "USD")?.Date} kuniga ko'ra {parseInt(currencies.find(item => item.Ccy === "USD")?.Rate)} sum (NBU)
+                    </span>
+                </div>
                 <div className="d-flex gap-1 align-items-center">
                     <div className="">
                         <Select
