@@ -3,7 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 export const BASE_URL = "https://api.marketlochin.uz/api/v1"
-export const urlNbu = "https://cbu.uz/uz"
+export const uriNbu = "https://cbu.uz/uz"
 // export const BASE_URL = "https://guzarpost.uz/api/v1"
 
 // LOCAL STORAGE
@@ -36,7 +36,7 @@ export const http = axios.create({
 })
 
 export const http_nbu = axios.create({
-    baseURL: urlNbu,
+    baseURL: uriNbu,
     headers: {
         Accept: "*/*"
     }

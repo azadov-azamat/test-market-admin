@@ -10,7 +10,8 @@ import {unwrapResult} from "@reduxjs/toolkit"
 
 export default function CreateUser({
                                        toggleModal,
-                                       modal
+                                       modal,
+                                       storeId
                                    }) {
 
     const dispatch = useDispatch()
@@ -28,7 +29,8 @@ export default function CreateUser({
             clientName: client?.clientName || '',
             clientPhone: client?.clientPhone || '',
             clientAdress: client?.clientAdress || '',
-            clientPaymentDate: client?.clientPaymentDate.substring(0, 10) || ''
+            clientPaymentDate: client?.clientPaymentDate.substring(0, 10) || '',
+            storeId
         },
         enableReinitialize: true,
         validationSchema: ValidateSchema,

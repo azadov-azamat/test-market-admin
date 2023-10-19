@@ -29,6 +29,11 @@ export default function CreateProduct({
 
     const [file, setFile] = useState(null)
     const [editImg, setEditImg] = useState(false)
+    // const [inputs, setInputs] = useState({
+    //     productQuantity: product?.productQuantity || '',
+    //     productMainPrice: product?.productMainPrice || '',
+    //     productPrice: product?.productPrice || ''
+    // })
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
@@ -47,14 +52,22 @@ export default function CreateProduct({
         toggleModal()
     }
 
+    // useEffect(() => { 
+    //     if (product) {
+    //         inputs.productPrice = product?.productPrice
+    //         inputs.productMainPrice = product?.productMainPrice
+    //         inputs.productQuantity = product?.productQuantity
+    //     }
+    // }, [product])
+
     const formik = useFormik({
         initialValues: {
             productName: product?.productName || '',
             productPrice: product?.productPrice || 0,
             productQuantity: product?.productQuantity || 0,
             productMainPrice: product?.productMainPrice || 0,
+            productCurrency: product?.productCurrency || "dollar",
             productModel: product?.productModel || '',
-            productCurrency: product?.productCurrency || 'sum',
             storeId,
             adressId: product?.adressId || '',
             productMeasure: product?.productMeasure || ''
@@ -107,6 +120,13 @@ export default function CreateProduct({
         }
     })
 
+    // const toggleInputs = (e) => {
+    //     const {name, value} = e.target
+    //     inputs[name] = value.replace(/[^0-9.]/g, '')
+    //     setInputs({...inputs})
+    //     formik.setFieldValue(name, value)
+    // }
+
     return (
         <Modal
             isOpen={modal}
@@ -153,44 +173,48 @@ export default function CreateProduct({
                                 />
                             </div>
                         </Col>
-                        <div className="d-flex justify-content-between">
-                            <Col className={"col-3"}>
-                                <div className="mb-1">
-                                    <Label className="form-label" for="productCurrency">
-                                        Valyuta *
-                                    </Label>
-                                    <Select
-                                        id="productCurrency"
-                                        name="productCurrency"
-                                        placeholder="Tanlang..."
-                                        options={[
-                                            {value: "dollar"},
-                                            {value: "sum"}
-                                        ]}
-                                        defaultValue={{
-                                            label: product?.productCurrency || "dollar",
-                                            value: product?.productCurrency || "dollar"
-                                        }}
-                                        getOptionLabel={option => option.value}
-                                        getOptionValue={option => option.value}
-                                        onChange={(val) => {
-                                            formik.setFieldValue("productCurrency", val.value)
-                                        }}
-                                    />
-                                </div>
-                            </Col>
-                            <Col className={"col-8"}>
-                                <div className="mb-1">
-                                    <Label for={"productMainPrice"}>Asosiy narxi *</Label>
-                                    <Input
-                                        id={'productMainPrice'}
-                                        name={"productMainPrice"}
-                                        defaultValue={product?.productMainPrice}
-                                        type={"number"}
-                                        onChange={formik.handleChange}
-                                    />
-                                </div>
-                            </Col>
+                        <div className="d-flex align-items-center gap-1">
+                        <Col className="col-3">
+                            <div className="mb-1">
+                                <Label className="form-label" for="productCurrency">
+                                    Valyuta *
+                                </Label>
+                                <Select
+                                    id="productCurrency"
+                                    name="productCurrency"
+                                    placeholder="Tanlang..."
+                                    options={[
+                                        {value: "dollar"},
+                                        {value: "sum"}
+                                    ]}
+                                    defaultValue={{
+                                        label: product?.productCurrency || "dollar",
+                                        value: product?.productCurrency || "dollar"
+                                    }}
+                                    getOptionLabel={option => option.value}
+                                    getOptionValue={option => option.value}
+                                    onChange={(val) => {
+                                        formik.setFieldValue("productCurrency", val.value)
+                                    }}
+                                />
+                            </div>
+                        </Col>
+                        <Col className="col-8">
+                            <div className="mb-1">
+                                <Label for={"productMainPrice"}>Asosiy narxi *</Label>
+                                <Input
+                                    id={'productMainPrice'}
+                                    name={"productMainPrice"}
+                                    // value={inputs.productMainPrice}
+                                    defaultValue={product?.productMainPrice}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
+                                />
+                            </div>
+                        </Col>
                         </div>
                         <Col>
                             <div className="mb-1">
@@ -198,21 +222,30 @@ export default function CreateProduct({
                                 <Input
                                     id={'productPrice'}
                                     name={"productPrice"}
+                                    // value={inputs.productPrice}
                                     defaultValue={product?.productPrice}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
                                 />
                             </div>
                         </Col>
+                    
                         <Col>
                             <div className="mb-1">
                                 <Label for={"productQuantity"}>Miqdori *</Label>
                                 <Input
                                     id={'productQuantity'}
                                     name={"productQuantity"}
+                                    // value={inputs.productQuantity}
                                     defaultValue={product?.productQuantity}
-                                    type={"number"}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const {name, value} = e.target
+                                        const text = value.replace(/[^0-9.]/g, '')
+                                        formik.setFieldValue(name, text)
+                                    }}
                                 />
                             </div>
                         </Col>

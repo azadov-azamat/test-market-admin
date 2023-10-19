@@ -90,13 +90,23 @@ export const patchClient = createAsyncThunk('app/patchClient', async (data, {rej
 
 export const sendSmsClients = createAsyncThunk('app/sendSmsClients', async (data, {rejectWithValue}) => {
     try {
-        const response = await http_auth.post(`/clients/sms`, data)
+        const response = await http_auth.post(`/clients/sms/${data?.storeId}`, data?.data)
         return response.data
     } catch (error) {
         return rejectWithValue(error.message)
     }
 })
 
+export const getClientsByStoreId = createAsyncThunk('app/getClientsByStoreId', async (data, {rejectWithValue}) => {
+    try {
+        const response = await http_auth.get(`/clients/sms/${data?.storeId}`, {
+            params: data?.param
+        })
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
 
 export const userSlice = createSlice({
     name: 'user',
@@ -231,6 +241,22 @@ export const userSlice = createSlice({
             state.isLoading = true
         },
         [patchClient.rejected]: (state, action) => {
+            toast.error(action.payload)
+            state.isLoading = false
+        },
+
+          [getClientsByStoreId.fulfilled]: (state, action) => {
+            state.clients = action.payload?.data
+            state.currentPage = action.payload?.currentPage
+            state.limit = action.payload?.limit
+            state.pageCount = action.payload?.pageCount
+            state.totalCount = action.payload?.totalCount
+            state.isLoading = false
+        },
+        [getClientsByStoreId.pending]: (state) => {
+            state.isLoading = true
+        },
+        [getClientsByStoreId.rejected]: (state, action) => {
             toast.error(action.payload)
             state.isLoading = false
         }

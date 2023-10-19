@@ -1,126 +1,110 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Download, Filter, Plus, Upload} from "react-feather"
+import {Download, Filter, Plus} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
+import {BsEye} from "react-icons/bs"
 import {useHistory, useLocation} from "react-router-dom"
+import {deleteClient, getClientsByStoreId, sendSmsClients, setClient} from "../../redux/reducers/user"
 import qs from "qs"
-import CreateProduct from "./create-product"
-import {deleteProduct, getProducts, setProduct} from "../../redux/reducers/product"
-import {getAddresses} from "../../redux/reducers/address"
+import CreateUser from "./create-user"
 import Select from "react-select"
-import FilterProduct from "./Filter"
-import DownloadProduct from "./download-product"
-import UploadProduct from "./upload-product"
-import { getCurrencyNbu } from '../../redux/reducers/payment'
+import FilterUser from "./Filter"
+import DateFormat from "../../components/DateFormat"
+import {MdOutlineSendToMobile} from "react-icons/md"
+import {unwrapResult} from "@reduxjs/toolkit"
+import {toast} from "react-toastify"
+import {useDownload} from "../../utility/hooks/useDownload"
 
-export default function Product({storeId}) {
+export default function Client({storeId}) {
 
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
     const {
-        products,
+        clients,
         currentPage,
         pageCount,
         limit,
         totalCount,
         isLoading
-    } = useSelector(state => state.products)
-    const {addresses} = useSelector(state => state.addresses)
-    const {currencies} = useSelector(state => state.payments)
+    } = useSelector(state => state.users)
 
     const [createModal, setCreateModal] = useState(false)
-    const [isUpload, setUpload] = useState(false)
     const [filter, setFilter] = useState(false)
-    const [isDownload, setDownload] = useState(false)
+    // const [idData, setIdData] = useState([])
+
     const handleFilter = () => setFilter(!filter)
-    const handleDownload = () => setDownload(!isDownload)
-    const toggleUpload = () => setUpload(!isUpload)
     const toggleCreate = () => setCreateModal(!createModal)
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
-    const dollarCur = parseInt(currencies?.find(item => item.Ccy === "USD")?.Rate)
 
     useEffect(() => {
         if (location.search) {
-            dispatch(getProducts({...query,  filter: {storeId}}))
+            dispatch(getClientsByStoreId({storeId, param: {...query}}))
         } else {
-            dispatch(getProducts({
-                limit: 10,
-                filter: {storeId}
-            }))
+            dispatch(getClientsByStoreId({storeId}))
         }
-    }, [location, storeId])
+    }, [location.search, storeId])
 
-    useEffect(() => {
-        dispatch(getAddresses())
-    }, [])
-
-    useEffect(() => {
-        dispatch(getCurrencyNbu())
-    }, [])
-
-    function editProduct(currentProduct) {
-        dispatch(setProduct(currentProduct))
+    function editUser(currentUser) {
+        dispatch(setClient(currentUser))
         toggleCreate()
     }
 
-    console.log(currencies)
-    
     const basicColumns = [
         {
-            name: "Nomi",
+            width: '50px',
+            wrap: true,
+            cell: (row) => <>
+                <BsEye className={'text-success cursor-pointer'} size={20}
+                       onClick={() => history.push(`/administrator/client/${row.id}/${storeId}`)}/>
+            </>
+        },
+        {
+            name: "F.I.O",
             width: '200px',
             sortable: true,
-            sortField: "productName",
-            // wrap: true,
-            selector: (row) => row.productName
-        },
-        {
-            name: "Asosiy narxi",
-            width: '250px',
-            sortable: true,
-            sortField: "productMainPrice",
+            sortField: "clientName",
             wrap: true,
-            selector: (row) => `${row?.productMainPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${Math.round(row?.productMainPrice * dollarCur)} sum`) : ""}`
+            selector: (row) => row.clientName
         },
         {
-            name: "Narxi",
-            width: '250px',
-            sortable: true,
-            sortField: "productPrice",
+            name: 'Telefon raqam',
+            width: '200px',
             wrap: true,
-            selector: (row) => `${row?.productPrice}  ${row?.productCurrency || "sum"} ${row?.productCurrency === "dollar" ? (` - ${Math.round(row?.productPrice * dollarCur)} sum`) : ""}`
-        },
-        {
-            name: "Miqdori",
-            width: '100px',
             sortable: true,
-            sortField: "productQuantity",
-            wrap: true,
-            selector: (row) => `${row.productQuantity} ${row.productMeasure}`
+            sortField: "clientPhone",
+            selector: (row) => row.clientPhone
         },
         {
-            name: "Manzili",
+            name: 'Qarzdorligi',
+            width: '200px',
+            wrap: true,
             sortable: true,
-            sortField: "adressId",
-            width: '150px',
-            wrap: true,
-            selector: (row) => addresses.find(item => item.id === row.adressId)?.adressName
+            sortField: "debtSum",
+            selector: (row) => row.debtSum
         },
         {
-            name: "Modeli",
-            width: '150px',
+            name: 'Manzili',
+            width: '200px',
+            wrap: true,
             sortable: true,
-            sortField: "productModel",
-            wrap: true,
-            selector: (row) => row.productModel
+            sortField: "clientAdress",
+            selector: (row) => row.clientAdress
         },
         {
-            name: "Ro'yxatga olingan vaqt",
+            name: "To'lov sanasi",
+            width: '200px',
+            wrap: true,
+            sortable: true,
+            sortField: "clientPaymentDate",
+            selector: (row) => <DateFormat current_date={row.clientPaymentDate}/>
+        },
+        {
+            name: "Ro'yxatdan o'tgan vaqt",
             width: '200px',
             sortable: true,
             sortField: "createdAt",
@@ -140,12 +124,33 @@ export default function Product({storeId}) {
             wrap: true,
             width: '100px',
             cell: (row) => <div className={`d-flex gap-1`}>
-                <BiEdit className={'text-warning cursor-pointer'} size={20} onClick={() => editProduct(row)}/>
+                <BiEdit className={'text-warning cursor-pointer'} size={20} onClick={() => editUser(row)}/>
                 <BiTrash className={'text-danger cursor-pointer'} size={20}
-                         onClick={() => dispatch(deleteProduct(row?.id))}/>
+                         onClick={() => dispatch(deleteClient(row?.id))}/>
             </div>
         }
     ]
+
+    // const handleChange = (selectedRows) => {
+    //     const data = []
+    //     for (const selectedRow of selectedRows?.selectedRows) {
+    //         data.push(selectedRow?.id)
+    //     }
+    //     setIdData(data)
+    //     // setSelectColumn(selectedRows?.selectedRows)
+    // }
+
+    function handleSend() {
+        // if (idData.length !== 0) {
+            dispatch(sendSmsClients({storeId})).then(unwrapResult)
+                .then(() => {
+                    toast.success("Mijozlarga sms jo'natildi")
+                })
+                .catch(() => {
+                    toast.error("Jo'natishda xatolik, Iltimos qayta urinib ko'ring")
+                })
+        // }
+    }
 
     return (
         <div>
@@ -182,40 +187,38 @@ export default function Product({storeId}) {
                             }}
                         />
                     </div>
+                    <Button onClick={() => useDownload(`clients/file`)} className="btn-icon" outline color="primary">
+                        <Download size={16}/>
+                    </Button>
                     <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
+                    </Button>
+                    <Button onClick={handleSend} className="btn-icon" outline
+                            color="primary">
+                        <MdOutlineSendToMobile size={20}/>
                     </Button>
                     <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
                         <Plus size={16}/>
                     </Button>
-                    <Button className="btn-icon" onClick={toggleUpload} outline color="primary">
-                        <Upload size={16}/>
-                    </Button>
-                    <Button className="btn-icon" onClick={handleDownload} outline color="primary">
-                        <Download size={16}/>
-                    </Button>
                 </div>
-            </div>
-            <div className='d-flex justify-content-center w-100 text-center mt-2'>
-            <p>Valyuta kursi NBU bankining {currencies?.find(item => item.Ccy === "USD")?.Date} ma'lumotiga ko'ra: {dollarCur} Sum</p>
             </div>
             <div>
                 <TableComponent
                     progressPending={isLoading}
-                    data={products}
-                    sortServer
+                    data={clients}
                     columns={basicColumns}
-                    size={products.length}
+                    size={clients.length}
                     limit={limit}
+                    sortServer
                     totalPages={pageCount}
                     currentPage={currentPage}
+                    // selectableRows
+                    // onSelectedRowsChange={handleChange}
                     total_count={totalCount}
                 />
             </div>
-            <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
-            <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
-            <UploadProduct modal={isUpload} toggleModal={toggleUpload} storeId={storeId}/>
-            <DownloadProduct toggleModal={handleDownload} modal={isDownload}/>
+            <CreateUser toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
+            <FilterUser handleFilter={handleFilter} open={filter}/>
         </div>
     )
 }
