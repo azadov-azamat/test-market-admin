@@ -8,6 +8,7 @@ import DateFormatClock from "../../components/DateFormatClock"
 import {handleSwitchPayType} from "../../utility/Utils"
 import SaleComponent from "../sales"
 import DebtComponent from "../debt"
+import SaleListComponent from "../sales/sale"
 
 export default function ViewClient() {
 
@@ -97,7 +98,7 @@ export default function ViewClient() {
             </Card>
             <TabContent className="py-50" activeTab={active}>
                 <TabPane tabId={"1"}>
-                    <SaleComponent clientId={id} storeId={storeId}/>
+                    <SaleListComponent clientId={id} storeId={storeId}/>
                 </TabPane>
                 <TabPane tabId={"2"}>
                     <DebtComponent clientId={id} storeId={storeId}/>
