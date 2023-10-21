@@ -43,9 +43,9 @@ export default function Client({storeId}) {
 
     useEffect(() => {
         if (location.search) {
-            dispatch(getClientsByStoreId({storeId, param: {...query}}))
+            dispatch(getClientsByStoreId({storeId, param: {...query, limit: 10}}))
         } else {
-            dispatch(getClientsByStoreId({storeId}))
+            dispatch(getClientsByStoreId({storeId, param: {limit: 10}}))
         }
     }, [location.search, storeId])
 
@@ -130,15 +130,6 @@ export default function Client({storeId}) {
             </div>
         }
     ]
-
-    // const handleChange = (selectedRows) => {
-    //     const data = []
-    //     for (const selectedRow of selectedRows?.selectedRows) {
-    //         data.push(selectedRow?.id)
-    //     }
-    //     setIdData(data)
-    //     // setSelectColumn(selectedRows?.selectedRows)
-    // }
 
     function handleSend() {
         // if (idData.length !== 0) {
