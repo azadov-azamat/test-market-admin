@@ -68,8 +68,6 @@ export default function Product({storeId}) {
         toggleCreate()
     }
 
-    console.log(currencies)
-    
     const basicColumns = [
         {
             name: "Nomi",
@@ -215,7 +213,7 @@ export default function Product({storeId}) {
             <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
             <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
             <UploadProduct modal={isUpload} toggleModal={toggleUpload} storeId={storeId}/>
-            <DownloadProduct toggleModal={handleDownload} modal={isDownload}/>
+            <DownloadProduct toggleModal={handleDownload} modal={isDownload} storeId={storeId}/>
         </div>
     )
 }

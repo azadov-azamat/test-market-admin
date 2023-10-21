@@ -7,7 +7,8 @@ import {useDownload} from "../../utility/hooks/useDownload"
 
 export default function DownloadProduct({
                                             toggleModal,
-                                            modal
+                                            modal,
+    storeId
                                         }) {
 
     const dispatch = useDispatch()
@@ -58,11 +59,7 @@ export default function DownloadProduct({
                     <hr/>
                     <div className="w-100 d-flex justify-content-end">
                         <Button disabled={!addressId} color={"primary"}
-                                onClick={() => useDownload(`products/file/${addressId}`)}>Yuklash</Button>
-                        {/*<a className={"disabled"} onClick={() => !addressId && toast.error("Manzilni tanlang")}*/}
-                        {/*   href={addressId ? `${BASE_URL}/products/file/${addressId}` : "#"}>*/}
-                        {/*    Yuklash*/}
-                        {/*</a>*/}
+                                onClick={() => useDownload(`products/file/${addressId}/${storeId}`)}>Yuklash</Button>
                     </div>
                 </Form>
             </ModalBody>
