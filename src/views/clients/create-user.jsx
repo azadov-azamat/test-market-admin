@@ -29,7 +29,7 @@ export default function CreateUser({
             clientName: client?.clientName || '',
             clientPhone: client?.clientPhone || '',
             clientAdress: client?.clientAdress || '',
-            clientPaymentDate: client?.clientPaymentDate.substring(0, 10) || '',
+            clientPaymentDate: client?.clientPaymentDate?.substring(0, 10) || '',
             storeId
         },
         enableReinitialize: true,
@@ -93,10 +93,6 @@ export default function CreateUser({
                                     defaultValue={client?.clientPhone}
                                     type={"number"}
                                     onChange={formik.handleChange}
-                                    // mask="99999999999"
-                                    // maskplaceholder=" "
-                                    // tag={ReactInputMask}
-                                    // onChange={pinChange}
                                 />
                             </div>
                         </Col>
@@ -118,7 +114,7 @@ export default function CreateUser({
                                 <Input
                                     id={'clientPaymentDate'}
                                     name={"clientPaymentDate"}
-                                    defaultValue={client?.clientPaymentDate.substring(0, 10)}
+                                    defaultValue={client?.clientPaymentDate?.substring(0, 10)}
                                     type={"date"}
                                     onChange={formik.handleChange}
                                 />
