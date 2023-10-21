@@ -121,7 +121,7 @@ export default function ViewSales() {
                                     className="position-absolute top-0 d-flex justify-content-end w-100">
                                     <FiExternalLink size={20}
                                                     className="cursor-pointer text-success"
-                                                    onClick={() => history.push(`/administrator/client/${sale?.client?.id}}`)}/>
+                                                    onClick={() => history.push(`/administrator/client/${sale?.client?.id}/${sale?.storeId}`)}/>
                                 </div>
 
                             </> : <>
@@ -148,7 +148,7 @@ export default function ViewSales() {
                                         <div className="w-100 d-flex gap-1" key={i}>
                                             <span className={"w-25"}>{pr?.soldProductName}</span>
                                             <span className={"w-25"}>{pr?.soldPrice} sum</span>
-                                            <span className={"w-25"}>{pr?.soldQuantity}</span>
+                                            <span className={"w-25"}>{pr?.soldQuantity} {pr?.soldProductMeasure}</span>
                                         </div>
                                     ))
                                 }

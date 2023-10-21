@@ -189,7 +189,7 @@ export default function SaleListComponent({clientId, storeId}) {
                                                     <div className="w-100 d-flex" key={i}>
                                                         <span className={"w-50"}>{pr?.soldProductName}</span>
                                                         <span className={"w-25"}>{pr?.soldPrice} sum</span>
-                                                        <span className={"w-25"}>{pr?.soldQuantity}</span>
+                                                        <span className={"w-25"}>{pr?.soldQuantity} {pr?.soldProductMeasure}</span>
                                                     </div>
                                                 ))
                                             }
@@ -199,10 +199,7 @@ export default function SaleListComponent({clientId, storeId}) {
                                 </CardBody>
                                 <div
                                     className="d-flex gap-1 align-items-center justify-content-end w-100 py-1 px-1">
-                                    {/*<a href={`${BASE_URL}/sales/file/${item?.id}`} className={'cursor-pointer'}>*/}
                                     <HiQrCode size={22} onClick={() => useDownload(`sales/file/${item?.id}`)}/>
-                                    {/*</a>*/}
-                                    {/*<Edit size={20} className={"cursor-pointer text-warning"}/>*/}
                                     <Trash size={20} className={"cursor-pointer text-danger"} onClick={() => {
                                         setId(item?.id)
                                         setTimeout(() => {
