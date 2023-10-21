@@ -4,7 +4,7 @@ import React, {useEffect} from "react"
 import {getSaleById} from "../../redux/reducers/sale"
 import {Card, CardBody, Col, Row} from "reactstrap"
 import DateFormatClock from "../../components/DateFormatClock"
-import {BASE_URL, handleSwitchPayType} from "../../utility/Utils"
+import {handleSwitchPayType} from "../../utility/Utils"
 import {HiQrCode} from "react-icons/hi2"
 import {FiExternalLink} from "react-icons/fi"
 import DateFormat from "../../components/DateFormat"
@@ -17,8 +17,6 @@ export default function ViewSales() {
     const history = useHistory()
 
     const {sale} = useSelector(state => state.sales)
-
-    console.log(sale)
 
     useEffect(() => {
         dispatch(getSaleById(id))
@@ -61,7 +59,7 @@ export default function ViewSales() {
                         <div
                             className="position-absolute top-0 d-flex justify-content-end w-100">
                             {/*<a href={`${BASE_URL}/sales/file/${sale?.id}`} className={'cursor-pointer'}>*/}
-                                <HiQrCode size={22} onClick={() => useDownload(`sales/file/${sale?.id}`)}/>
+                            <HiQrCode size={22} onClick={() => useDownload(`sales/file/${sale?.id}`)}/>
                             {/*</a>*/}
                         </div>
                     </Card>

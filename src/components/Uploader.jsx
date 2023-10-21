@@ -44,7 +44,7 @@ const FileUploader = ({ files, setFiles, handleUpload }) => {
             </Button>
         </ListGroupItem>
     ))
-    console.log(files)
+
     return (
         <div className='border rounded p-1'>
             {!files?.length ? (

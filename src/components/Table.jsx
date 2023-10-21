@@ -24,7 +24,7 @@ const TableComponent = ({ref, data, total_count, columns, currentPage, totalPage
             })
         })
     }
-    console.log(limit)
+
     const handlePaginate = (page) => {
         history.push({
             pathname: location.pathname,

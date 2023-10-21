@@ -1,5 +1,5 @@
-import { Offcanvas, OffcanvasHeader, OffcanvasBody, Label, Input, Form, Button, Row, Col } from "reactstrap"
-import { useLocation, useHistory } from "react-router-dom"
+import {Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row} from "reactstrap"
+import {useHistory} from "react-router-dom"
 import ReactSelect from "react-select"
 import qs from 'qs'
 import PropTypes from "prop-types"
@@ -7,13 +7,16 @@ import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import {useFormik} from "formik"
 
-const Filter = ({ open, toggle, fields, dispatchUrl }) => {
+const Filter = ({
+                    open,
+                    toggle,
+                    fields,
+                    dispatchUrl
+                }) => {
 
     const dispatch = useDispatch()
-    const location = useLocation()
     const history = useHistory()
-    // const defaultValue = qs.parse(location.search, { ignoreQueryPrefix: true })
-    console.log(location.search, qs)
+
     useEffect(() => {
         dispatch(dispatchUrl)
     }, [])
@@ -27,20 +30,6 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
             })
         }
     })
-    // const handleSubmit = (event) => {
-    //     event.preventDefault()
-    //     const formData = new FormData(event.target)
-    //     const asString = new URLSearchParams(formData).toString()
-    //     const query = qs.parse(asString, { ignoreQueryPrefix: true })
-    //     Object.keys(query).forEach(key => {
-    //         if (query[key] === '' || query[key] === null || query[key] === undefined) {
-    //             delete query[key]
-    //         }
-    //     })
-    //     const queryUrl = qs.stringify(query)
-    //     history.push(`${location.pathname}?${queryUrl}`)
-    //     // toggle()
-    // }
 
     function clearable() {
         history.push({
@@ -49,10 +38,9 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
         toggle()
     }
 
-    console.log(fields)
     return (
         <Offcanvas
-            direction='end'
+            direction="end"
             isOpen={open}
             toggle={toggle}
         >
@@ -65,8 +53,8 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
                                 {
                                     {
                                         INPUT: (
-                                            <div key={index} className='mb-1'>
-                                                <Label className='form-label' for={field?.props?.name}>
+                                            <div key={index} className="mb-1">
+                                                <Label className="form-label" for={field?.props?.name}>
                                                     {field?.label}
                                                 </Label>
                                                 <Input
@@ -79,16 +67,16 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
                                             </div>
                                         ),
                                         SELECT: (
-                                            <div key={index} className='mb-1'>
-                                                <Label className='form-label' for={field?.props?.name}>
+                                            <div key={index} className="mb-1">
+                                                <Label className="form-label" for={field?.props?.name}>
                                                     {field?.label}
                                                 </Label>
                                                 <ReactSelect
                                                     id={field?.props?.name}
                                                     name={field?.props?.name}
                                                     isClearable={true}
-                                                    className='react-select'
-                                                    classNamePrefix='select'
+                                                    className="react-select"
+                                                    classNamePrefix="select"
                                                     placeholder={field?.props?.placeholder}
                                                     getOptionLabel={(option) => option.label}
                                                     getOptionValue={(option) => option.value}
@@ -100,16 +88,18 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
                                             </div>
                                         ),
                                         CHECKBOX: (
-                                            <div key={index} className='mb-1'>
-                                                <Label className='form-label' for={field?.props?.name}>
+                                            <div key={index} className="mb-1">
+                                                <Label className="form-label" for={field?.props?.name}>
                                                     {field?.label}
                                                 </Label>
                                                 <Row xl={2}>
                                                     {
                                                         field?.options?.map((option, i) => (
                                                             <Col key={i} className="mb-1">
-                                                                <Input type="checkbox" id={option?.value} name={option?.value} value={true} />
-                                                                <label for={option?.value} className="ml-1">{option?.label}</label>
+                                                                <Input type="checkbox" id={option?.value}
+                                                                       name={option?.value} value={true}/>
+                                                                <label for={option?.value}
+                                                                       className="ml-1">{option?.label}</label>
                                                             </Col>
                                                         ))
                                                     }
@@ -117,16 +107,18 @@ const Filter = ({ open, toggle, fields, dispatchUrl }) => {
                                             </div>
                                         ),
                                         RADIO: (
-                                            <div key={index} className='mb-1'>
-                                                <Label className='form-label' for={field?.props?.name}>
+                                            <div key={index} className="mb-1">
+                                                <Label className="form-label" for={field?.props?.name}>
                                                     {field?.label}
                                                 </Label>
                                                 <Row xl={2}>
                                                     {
                                                         field?.options?.map((option, i) => (
                                                             <Col key={i} className="mb-1">
-                                                                <Input type="radio" id={option?.value} {...field?.props} value={option?.value} />
-                                                                <label for={option?.value} className="ml-1">{option?.label}</label>
+                                                                <Input type="radio" id={option?.value} {...field?.props}
+                                                                       value={option?.value}/>
+                                                                <label for={option?.value}
+                                                                       className="ml-1">{option?.label}</label>
                                                             </Col>
                                                         ))
                                                     }

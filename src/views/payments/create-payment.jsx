@@ -91,7 +91,6 @@ export default function CreatePayment({
         ])
         toggleModal()
     }
-    console.log(inputFields)
 
     function SavePayments() {
         if (payment) {

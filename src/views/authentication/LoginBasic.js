@@ -46,7 +46,6 @@ const LoginBasic = () => {
             sellerPhone: ''
         },
         onSubmit: (val) => {
-            console.log(val)
             dispatch(login(val)).then(unwrapResult).then(function (e) {
                 if (e.data?.seller?.sellerRole === "admin") {
                     history.push(`/administrator/users`)
