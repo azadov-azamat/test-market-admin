@@ -43,6 +43,7 @@ export default function UploadProduct({
                 dispatch(uploadFile(formD)).then(unwrapResult).then(res => {
                     const data = {
                         addressId: val?.adressId,
+                        storeId,
                         body: {
                             url: res?.url,
                             storeId

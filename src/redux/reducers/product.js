@@ -16,7 +16,7 @@ export const getProducts = createAsyncThunk('product/getProducts', async (data, 
 
 export const createProductFile = createAsyncThunk('product/createProductFile', async (data, {rejectWithValue}) => {
     try {
-        const response = await http_auth.post(`/products/file/${data?.addressId}`, data?.body)
+        const response = await http_auth.post(`/products/file/${data?.addressId}/${data?.storeId}`, data?.body)
         return response.data
     } catch (error) {
         return rejectWithValue(error.message)
