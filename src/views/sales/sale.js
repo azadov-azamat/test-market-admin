@@ -16,7 +16,10 @@ import {unwrapResult} from "@reduxjs/toolkit"
 import {getStores} from "../../redux/reducers/store"
 import {useDownload} from "../../utility/hooks/useDownload"
 
-export default function SaleListComponent({clientId, storeId}) {
+export default function SaleListComponent({
+                                              clientId,
+                                              storeId
+                                          }) {
 
     const dispatch = useDispatch()
     const history = useHistory()
@@ -46,7 +49,8 @@ export default function SaleListComponent({clientId, storeId}) {
         history.push({
             search: qs.stringify({
                 ...query,
-                limit: 10
+                limit: 10,
+                sort: '-id'
             })
         })
     }, [])
@@ -56,6 +60,7 @@ export default function SaleListComponent({clientId, storeId}) {
             if (location.search) {
                 dispatch(getSales({
                     ...query,
+                    sort: '-id',
                     filter: JSON.stringify({
                         clientId,
                         storeId
@@ -65,6 +70,7 @@ export default function SaleListComponent({clientId, storeId}) {
                 // setTimeout(() => {
                 dispatch(getSales({
                     limit: 10,
+                    sort: '-id',
                     filter: JSON.stringify({
                         clientId,
                         storeId
@@ -72,12 +78,18 @@ export default function SaleListComponent({clientId, storeId}) {
                 }))
                 // }, 1000)
             }
-        } else  {
+        } else {
             if (location.search) {
-                dispatch(getSales({...query}))
+                dispatch(getSales({
+                    ...query,
+                    sort: '-id'
+                }))
             } else {
                 // setTimeout(() => {
-                dispatch(getSales({limit: 10}))
+                dispatch(getSales({
+                    limit: 10,
+                    sort: '-id'
+                }))
                 // }, 1000)
             }
         }
@@ -143,9 +155,6 @@ export default function SaleListComponent({clientId, storeId}) {
                         <Button onClick={handleFilter} className="btn-icon" outline color="primary">
                             <Filter size={16}/>
                         </Button>
-                        {/*<Button className="btn-icon" onClick={toggleCreate} outline color="primary">*/}
-                        {/*    <Plus size={16}/>*/}
-                        {/*</Button>*/}
                     </div>
                 </div>}
             <Row md={2} xl={3} className={"row-cols-1"}>
@@ -189,7 +198,8 @@ export default function SaleListComponent({clientId, storeId}) {
                                                     <div className="w-100 d-flex" key={i}>
                                                         <span className={"w-50"}>{pr?.soldProductName}</span>
                                                         <span className={"w-25"}>{pr?.soldPrice} sum</span>
-                                                        <span className={"w-25"}>{pr?.soldQuantity} {pr?.soldProductMeasure}</span>
+                                                        <span
+                                                            className={"w-25"}>{pr?.soldQuantity} {pr?.soldProductMeasure}</span>
                                                     </div>
                                                 ))
                                             }
