@@ -90,9 +90,9 @@ export default function CreateUser({
         }
     })
 
-    function pinChange(e) {
-        formik.setFieldValue('sellerPhone', e.target.value.replace(/_/g, ''))
-    }
+    // function pinChange(e) {
+    //     formik.setFieldValue('sellerPhone', e.target.value.replace(/_/g, ''))
+    // }
 
     return (
         <Modal
@@ -135,11 +135,8 @@ export default function CreateUser({
                                     id={'sellerPhone'}
                                     name={"sellerPhone"}
                                     defaultValue={user?.sellerPhone}
-                                    type={"text"}
-                                    mask="99999999999"
-                                    maskplaceholder=" "
-                                    tag={ReactInputMask}
-                                    onChange={pinChange}
+                                    type={"number"}
+                                    onChange={formik.handleChange}
                                 />
                             </div>
                         </Col>
