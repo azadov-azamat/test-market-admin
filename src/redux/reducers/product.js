@@ -41,6 +41,17 @@ export const deleteProduct = createAsyncThunk('product/deleteProduct', async (da
     }
 })
 
+export const deleteProductList = createAsyncThunk('product/deleteProductList', async (data, {rejectWithValue}) => {
+    try {
+        const response = await http_auth.delete(`/products`, {
+            data
+        })
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
+
 export const patchProduct = createAsyncThunk('product/patchProduct', async (data, {rejectWithValue}) => {
     try {
         const response = await http_auth.patch(`/products/${data?.id}`, data?.body)
@@ -58,7 +69,7 @@ export const productSlice = createSlice({
         product: null,
         currentPage: 0,
         pageCount: 0,
-       limit: 10,
+        limit: 10,
         totalCount: 0
     },
     reducers: {
@@ -104,6 +115,24 @@ export const productSlice = createSlice({
         },
         [deleteProduct.rejected]: (state, action) => {
             toast.error(action.payload)
+            state.isLoading = false
+        },
+
+
+        [deleteProductList.fulfilled]: (state, action) => {
+            let currentItem = []
+            for (const argElement of action?.meta?.arg) {
+                currentItem = state.products.filter(item => item.id !== argElement)
+            }
+            state.products = currentItem
+            state.isLoading = false
+        },
+        [deleteProductList.pending]: (state) => {
+            state.isLoading = true
+        },
+        [deleteProductList.rejected]: (state) => {
+            // toast.error(action.payload)
+            toast.error("O'chirishning imkoni yo'q")
             state.isLoading = false
         },
 

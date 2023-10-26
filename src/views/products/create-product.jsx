@@ -29,11 +29,6 @@ export default function CreateProduct({
 
     const [file, setFile] = useState(null)
     const [editImg, setEditImg] = useState(false)
-    // const [inputs, setInputs] = useState({
-    //     productQuantity: product?.productQuantity || '',
-    //     productMainPrice: product?.productMainPrice || '',
-    //     productPrice: product?.productPrice || ''
-    // })
 
     const ValidateSchema = Yup.object().shape({
         productName: Yup.string().required(INPUT_MSG),
@@ -51,14 +46,6 @@ export default function CreateProduct({
         dispatch(setProduct(null))
         toggleModal()
     }
-
-    // useEffect(() => { 
-    //     if (product) {
-    //         inputs.productPrice = product?.productPrice
-    //         inputs.productMainPrice = product?.productMainPrice
-    //         inputs.productQuantity = product?.productQuantity
-    //     }
-    // }, [product])
 
     const formik = useFormik({
         initialValues: {
@@ -119,13 +106,6 @@ export default function CreateProduct({
             }
         }
     })
-
-    // const toggleInputs = (e) => {
-    //     const {name, value} = e.target
-    //     inputs[name] = value.replace(/[^0-9.]/g, '')
-    //     setInputs({...inputs})
-    //     formik.setFieldValue(name, value)
-    // }
 
     return (
         <Modal

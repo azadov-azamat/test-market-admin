@@ -1,20 +1,21 @@
 import React, {useEffect, useState} from 'react'
 import TableComponent from "../../components/Table"
 import DateFormatClock from "../../components/DateFormatClock"
-import {Download, Filter, Plus, Upload} from "react-feather"
+import {Download, Filter, Plus, Trash2, Upload} from "react-feather"
 import {Button} from "reactstrap"
 import {useDispatch, useSelector} from "react-redux"
 import {BiEdit, BiTrash} from "react-icons/bi"
 import {useHistory, useLocation} from "react-router-dom"
 import qs from "qs"
 import CreateProduct from "./create-product"
-import {deleteProduct, getProducts, setProduct} from "../../redux/reducers/product"
+import {deleteProduct, deleteProductList, getProducts, setProduct} from "../../redux/reducers/product"
 import {getAddresses} from "../../redux/reducers/address"
 import Select from "react-select"
 import FilterProduct from "./Filter"
 import DownloadProduct from "./download-product"
 import UploadProduct from "./upload-product"
-import { getCurrencyNbu } from '../../redux/reducers/payment'
+import {getCurrencyNbu} from '../../redux/reducers/payment'
+import DeleteModal from "../delete-modal"
 
 export default function Product({storeId}) {
 
@@ -32,21 +33,29 @@ export default function Product({storeId}) {
     const {addresses} = useSelector(state => state.addresses)
     const {currencies} = useSelector(state => state.payments)
 
-    const [createModal, setCreateModal] = useState(false)
-    const [isUpload, setUpload] = useState(false)
-    const [filter, setFilter] = useState(false)
-    const [isDownload, setDownload] = useState(false)
-    const handleFilter = () => setFilter(!filter)
-    const handleDownload = () => setDownload(!isDownload)
-    const toggleUpload = () => setUpload(!isUpload)
-    const toggleCreate = () => setCreateModal(!createModal)
+    const [idData, setIdData] = useState([])
+    const [modals, setModal] = useState({
+        create: false,
+        isUpload: false,
+        filter: false,
+        isDownload: false,
+        isDeleteList: false
+    })
+
+    const toggleModal = (modal) => {
+        modals[modal] = !modals[modal]
+        setModal({...modals})
+    }
 
     const query = qs.parse(location.search, {ignoreQueryPrefix: true})
     const dollarCur = parseInt(currencies?.find(item => item.Ccy === "USD")?.Rate)
 
     useEffect(() => {
         if (location.search) {
-            dispatch(getProducts({...query,  filter: {storeId}}))
+            dispatch(getProducts({
+                ...query,
+                filter: {storeId}
+            }))
         } else {
             dispatch(getProducts({
                 limit: 10,
@@ -65,7 +74,7 @@ export default function Product({storeId}) {
 
     function editProduct(currentProduct) {
         dispatch(setProduct(currentProduct))
-        toggleCreate()
+        toggleModal('create')
     }
 
     const basicColumns = [
@@ -145,6 +154,16 @@ export default function Product({storeId}) {
         }
     ]
 
+    const handleChange = (selectList) => {
+        const currentData = []
+        for (const selectedRow of selectList.selectedRows) {
+            currentData.push(selectedRow?.id)
+        }
+        setIdData(currentData)
+    }
+
+    console.log(modals)
+
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
@@ -180,28 +199,35 @@ export default function Product({storeId}) {
                             }}
                         />
                     </div>
-                    <Button onClick={handleFilter} className="btn-icon" outline color="primary">
+                    {idData.length > 0 &&
+                        <Button onClick={() => toggleModal('isDeleteList')} className="btn-icon" outline color="danger">
+                            <Trash2 size={16}/>
+                        </Button>}
+                    <Button onClick={() => toggleModal('filter')} className="btn-icon" outline color="primary">
                         <Filter size={16}/>
                     </Button>
-                    <Button className="btn-icon" onClick={toggleCreate} outline color="primary">
+                    <Button className="btn-icon" onClick={() => toggleModal('create')} outline color="primary">
                         <Plus size={16}/>
                     </Button>
-                    <Button className="btn-icon" onClick={toggleUpload} outline color="primary">
+                    <Button className="btn-icon" onClick={() => toggleModal('isUpload')} outline color="primary">
                         <Upload size={16}/>
                     </Button>
-                    <Button className="btn-icon" onClick={handleDownload} outline color="primary">
+                    <Button className="btn-icon" onClick={() => toggleModal('isDownload')} outline color="primary">
                         <Download size={16}/>
                     </Button>
                 </div>
             </div>
-            <div className='d-flex justify-content-center w-100 text-center mt-2'>
-            <p>Valyuta kursi NBU bankining {currencies?.find(item => item.Ccy === "USD")?.Date} ma'lumotiga ko'ra: {dollarCur} Sum</p>
+            <div className="d-flex justify-content-center w-100 text-center mt-2">
+                <p>Valyuta kursi NBU bankining {currencies?.find(item => item.Ccy === "USD")?.Date} ma'lumotiga
+                    ko'ra: {dollarCur} Sum</p>
             </div>
             <div>
                 <TableComponent
                     progressPending={isLoading}
                     data={products}
                     sortServer
+                    selectableRows
+                    onSelectedRowsChange={handleChange}
                     columns={basicColumns}
                     size={products.length}
                     limit={limit}
@@ -210,10 +236,12 @@ export default function Product({storeId}) {
                     total_count={totalCount}
                 />
             </div>
-            <CreateProduct toggleModal={toggleCreate} modal={createModal} storeId={storeId}/>
-            <FilterProduct handleFilter={handleFilter} open={filter} storeId={storeId}/>
-            <UploadProduct modal={isUpload} toggleModal={toggleUpload} storeId={storeId}/>
-            <DownloadProduct toggleModal={handleDownload} modal={isDownload} storeId={storeId}/>
+            <CreateProduct modal={modals.create} toggleModal={() => toggleModal('create')} storeId={storeId}/>
+            <FilterProduct open={modals.filter} handleFilter={() => toggleModal('filter')} storeId={storeId}/>
+            <UploadProduct modal={modals.isUpload} toggleModal={() => toggleModal('isUpload')} storeId={storeId}/>
+            <DownloadProduct modal={modals.isDownload} toggleModal={() => toggleModal('isDownload')} storeId={storeId}/>
+            <DeleteModal modal={modals.isDeleteList} toggleModal={() => toggleModal('isDeleteList')}
+                         onFunction={() => dispatch(deleteProductList(idData))}/>
         </div>
     )
 }
