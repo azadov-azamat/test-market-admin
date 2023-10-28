@@ -162,8 +162,6 @@ export default function Product({storeId}) {
         setIdData(currentData)
     }
 
-    console.log(modals)
-
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
