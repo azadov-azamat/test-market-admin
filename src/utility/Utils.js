@@ -3,7 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 // export const BASE_URL = "https://api.marketlochin.uz/api/v1"
-export const BASE_URL = "https://test-market-nine.vercel.app/api/v1"
+export const BASE_URL = "https://test.marketlochin.uz/api/v1"
 export const uriNbu = "https://cbu.uz/uz"
 // export const BASE_URL = "https://guzarpost.uz/api/v1"
 
