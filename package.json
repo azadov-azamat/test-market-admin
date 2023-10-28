@@ -110,6 +110,9 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "devDependencies": {
     "@types/sortablejs": "^1.10.6",
     "sass-loader": "8.0.2"
